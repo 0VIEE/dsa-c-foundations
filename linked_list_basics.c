@@ -6,6 +6,7 @@ struct Node {
     struct Node *link;
 };
 
+// Function to create a node
 struct Node* create_node(int val) {
     struct Node *p = (struct Node*)malloc(sizeof(struct Node));
     if (p == NULL) {
@@ -17,6 +18,17 @@ struct Node* create_node(int val) {
     return p;
 }
 
+// Function to insert at the head
+struct Node* insert_head(struct Node *head, int val) {
+    struct Node *p = create_node(val);
+    if (p == NULL) return head;
+    
+    p->link = head;
+    head = p;
+    return head;
+}
+
+// Function to print the list
 void print_list(struct Node *head) {
     struct Node *p = head;
     while (p != NULL) {
@@ -27,10 +39,15 @@ void print_list(struct Node *head) {
 }
 
 int main() {
-    struct Node *head = create_node(10);
-    head->link = create_node(20);
-    head->link->link = create_node(30);
+    struct Node *head = NULL;
 
+    // Inserting elements at the head
+    head = insert_head(head, 30);
+    head = insert_head(head, 20);
+    head = insert_head(head, 10);
+
+    printf("Linked List after insertions:\n");
     print_list(head);
+
     return 0;
 }
