@@ -38,16 +38,36 @@ void print_list(struct Node *head) {
     printf("NULL\n");
 }
 
+struct Node* insert_tail(struct Node *head, int val) {
+    struct Node *temp = create_node(val);
+    if (temp == NULL) return head;
+
+    // If list is empty, new node becomes head
+    if (head == NULL) {
+        return temp;
+    }
+
+    // Traverse to the last node
+    struct Node *p = head;
+    while (p->link != NULL) {
+        p = p->link;
+    }
+
+    // Link the last node to the new node
+    p->link = temp;
+    return head;
+}
+
 int main() {
     struct Node *head = NULL;
 
-    // Inserting elements at the head
-    head = insert_head(head, 30);
-    head = insert_head(head, 20);
-    head = insert_head(head, 10);
+    // Build list using insert_tail
+    head = insert_tail(head, 10);
+    head = insert_tail(head, 20);
+    head = insert_tail(head, 30);
 
-    printf("Linked List after insertions:\n");
-    print_list(head);
+    printf("List built using insert_tail:\n");
+    print_list(head); // Should print: 10 -> 20 -> 30 -> NULL
 
     return 0;
 }
