@@ -58,6 +58,20 @@ struct Node* insert_tail(struct Node *head, int val) {
     return head;
 }
 
+// Function to delete the head node
+struct Node* delete_head(struct Node *head) {
+    if (head == NULL) {
+        printf("List is empty, nothing to delete!\n");
+        return NULL;
+    }
+
+    struct Node *p = head;
+    head = head->link;
+    free(p);
+
+    return head;
+}
+
 int main() {
     struct Node *head = NULL;
 
@@ -67,7 +81,13 @@ int main() {
     head = insert_tail(head, 30);
 
     printf("List built using insert_tail:\n");
-    print_list(head); // Should print: 10 -> 20 -> 30 -> NULL
+    print_list(head); // Prints: 10 -> 20 -> 30 -> NULL
+
+    // Delete head
+    head = delete_head(head);
+
+    printf("List after delete_head:\n");
+    print_list(head); // Prints: 20 -> 30 -> NULL
 
     return 0;
 }
