@@ -72,22 +72,49 @@ struct Node* delete_head(struct Node *head) {
     return head;
 }
 
+// Function to delete the tail node
+struct Node* delete_tail(struct Node *head) {
+    if (head == NULL) {
+        printf("List is empty, nothing to delete!\n");
+        return NULL;
+    }
+
+    // Special case: Only one node in the list
+    if (head->link == NULL) {
+        free(head);
+        return NULL;
+    }
+
+    // Traverse to the second-to-last node using pointer p
+    struct Node *p = head;
+    while (p->link->link != NULL) {
+        p = p->link;
+    }
+
+    // Free the tail node and break the link
+    free(p->link);
+    p->link = NULL;
+
+    return head;
+}
+
 int main() {
     struct Node *head = NULL;
 
-    // Build list using insert_tail
+    // Build list
     head = insert_tail(head, 10);
     head = insert_tail(head, 20);
     head = insert_tail(head, 30);
+    head = insert_tail(head, 40);
 
-    printf("List built using insert_tail:\n");
+    printf("Original List:\n");
+    print_list(head); // Prints: 10 -> 20 -> 30 -> 40 -> NULL
+
+    // Delete tail
+    head = delete_tail(head);
+
+    printf("List after delete_tail:\n");
     print_list(head); // Prints: 10 -> 20 -> 30 -> NULL
-
-    // Delete head
-    head = delete_head(head);
-
-    printf("List after delete_head:\n");
-    print_list(head); // Prints: 20 -> 30 -> NULL
 
     return 0;
 }
