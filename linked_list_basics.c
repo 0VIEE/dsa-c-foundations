@@ -98,10 +98,26 @@ struct Node* delete_tail(struct Node *head) {
     return head;
 }
 
+// Function to search for a value in the list
+int search_node(struct Node *head, int key) {
+    struct Node *p = head;
+    int pos = 1;
+
+    while (p != NULL) {
+        if (p->data == key) {
+            return pos; // Found key at this position
+        }
+        p = p->link;
+        pos++;
+    }
+
+    return -1; // Key not found
+}
+
 int main() {
     struct Node *head = NULL;
 
-    // Build list
+    // 1. Build the list using insert_tail
     head = insert_tail(head, 10);
     head = insert_tail(head, 20);
     head = insert_tail(head, 30);
@@ -110,11 +126,29 @@ int main() {
     printf("Original List:\n");
     print_list(head); // Prints: 10 -> 20 -> 30 -> 40 -> NULL
 
-    // Delete tail
+    // 2. Test search_node before deletion
+    int target = 30;
+    int pos = search_node(head, target);
+    if (pos != -1) {
+        printf("Element %d found at position: %d\n", target, pos);
+    } else {
+        printf("Element %d not found in the list.\n", target);
+    }
+
+    // 3. Delete tail
     head = delete_tail(head);
 
     printf("List after delete_tail:\n");
     print_list(head); // Prints: 10 -> 20 -> 30 -> NULL
+
+    // 4. Test search_node for an element no longer in the list (or missing)
+    target = 40;
+    pos = search_node(head, target);
+    if (pos != -1) {
+        printf("Element %d found at position: %d\n", target, pos);
+    } else {
+        printf("Element %d not found in the list.\n", target);
+    }
 
     return 0;
 }
