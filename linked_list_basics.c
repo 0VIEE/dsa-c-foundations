@@ -114,6 +114,19 @@ int search_node(struct Node *head, int key) {
     return -1; // Key not found
 }
 
+// Function to count total nodes in the list
+int get_length(struct Node *head) {
+    int count = 0;
+    struct Node *p = head;
+
+    while (p != NULL) {
+        count++;
+        p = p->link;
+    }
+
+    return count;
+}
+
 int main() {
     struct Node *head = NULL;
 
@@ -125,6 +138,9 @@ int main() {
 
     printf("Original List:\n");
     print_list(head); // Prints: 10 -> 20 -> 30 -> 40 -> NULL
+
+    // Check length of original list
+    printf("Total nodes: %d\n", get_length(head)); // Prints: 4
 
     // 2. Test search_node before deletion
     int target = 30;
@@ -138,10 +154,13 @@ int main() {
     // 3. Delete tail
     head = delete_tail(head);
 
-    printf("List after delete_tail:\n");
+    printf("\nList after delete_tail:\n");
     print_list(head); // Prints: 10 -> 20 -> 30 -> NULL
 
-    // 4. Test search_node for an element no longer in the list (or missing)
+    // Check length after deletion
+    printf("Total nodes: %d\n", get_length(head)); // Prints: 3
+
+    // 4. Test search_node for deleted element
     target = 40;
     pos = search_node(head, target);
     if (pos != -1) {
