@@ -127,6 +127,22 @@ int get_length(struct Node *head) {
     return count;
 }
 
+// Function to reverse the linked list iteratively
+struct Node* reverse_list(struct Node *head) {
+    struct Node *prev = NULL;
+    struct Node *p = head;
+    struct Node *next = NULL;
+
+    while (p != NULL) {
+        next = p->link;  // Store next node
+        p->link = prev;  // Reverse current node's pointer
+        prev = p;        // Move prev forward
+        p = next;        // Move p forward
+    }
+
+    head = prev; // New head is the last non-null node processed
+    return head;
+}
 int main() {
     struct Node *head = NULL;
 
@@ -142,32 +158,29 @@ int main() {
     // Check length of original list
     printf("Total nodes: %d\n", get_length(head)); // Prints: 4
 
-    // 2. Test search_node before deletion
+    // 2. Reverse the list
+    head = reverse_list(head);
+
+    printf("\nList after reverse_list:\n");
+    print_list(head); // Prints: 40 -> 30 -> 20 -> 10 -> NULL
+
+    // 3. Test search_node on reversed list
     int target = 30;
     int pos = search_node(head, target);
     if (pos != -1) {
-        printf("Element %d found at position: %d\n", target, pos);
+        printf("Element %d found at position: %d\n", target, pos); // Position is now 2!
     } else {
         printf("Element %d not found in the list.\n", target);
     }
 
-    // 3. Delete tail
+    // 4. Delete tail of reversed list (which deletes 10 now)
     head = delete_tail(head);
 
     printf("\nList after delete_tail:\n");
-    print_list(head); // Prints: 10 -> 20 -> 30 -> NULL
+    print_list(head); // Prints: 40 -> 30 -> 20 -> NULL
 
     // Check length after deletion
     printf("Total nodes: %d\n", get_length(head)); // Prints: 3
-
-    // 4. Test search_node for deleted element
-    target = 40;
-    pos = search_node(head, target);
-    if (pos != -1) {
-        printf("Element %d found at position: %d\n", target, pos);
-    } else {
-        printf("Element %d not found in the list.\n", target);
-    }
 
     return 0;
 }
