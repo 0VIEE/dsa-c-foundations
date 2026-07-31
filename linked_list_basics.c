@@ -143,6 +143,22 @@ struct Node* reverse_list(struct Node *head) {
     head = prev; // New head is the last non-null node processed
     return head;
 }
+
+// Function to find the middle node of the list
+struct Node* find_middle(struct Node *head) {
+    if (head == NULL) return NULL;
+
+    struct Node *slow = head;
+    struct Node *fast = head;
+
+    while (fast != NULL && fast->link != NULL) {
+        slow = slow->link;         // Moves 1 step
+        fast = fast->link->link;   // Moves 2 steps
+    }
+
+    return slow; // Points to the middle element
+}
+
 int main() {
     struct Node *head = NULL;
 
@@ -155,8 +171,11 @@ int main() {
     printf("Original List:\n");
     print_list(head); // Prints: 10 -> 20 -> 30 -> 40 -> NULL
 
-    // Check length of original list
-    printf("Total nodes: %d\n", get_length(head)); // Prints: 4
+    // Test find_middle on even length list (4 nodes)
+    struct Node *mid = find_middle(head);
+    if (mid != NULL) {
+        printf("Middle node value (even length): %d\n", mid->data); // Prints: 30
+    }
 
     // 2. Reverse the list
     head = reverse_list(head);
@@ -164,23 +183,17 @@ int main() {
     printf("\nList after reverse_list:\n");
     print_list(head); // Prints: 40 -> 30 -> 20 -> 10 -> NULL
 
-    // 3. Test search_node on reversed list
-    int target = 30;
-    int pos = search_node(head, target);
-    if (pos != -1) {
-        printf("Element %d found at position: %d\n", target, pos); // Position is now 2!
-    } else {
-        printf("Element %d not found in the list.\n", target);
-    }
-
-    // 4. Delete tail of reversed list (which deletes 10 now)
+    // 3. Delete tail of reversed list (deletes 10, leaving 3 nodes)
     head = delete_tail(head);
 
     printf("\nList after delete_tail:\n");
     print_list(head); // Prints: 40 -> 30 -> 20 -> NULL
 
-    // Check length after deletion
-    printf("Total nodes: %d\n", get_length(head)); // Prints: 3
+    // Test find_middle on odd length list (3 nodes)
+    mid = find_middle(head);
+    if (mid != NULL) {
+        printf("Middle node value (odd length): %d\n", mid->data); // Prints: 30
+    }
 
     return 0;
 }
