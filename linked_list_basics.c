@@ -159,6 +159,57 @@ struct Node* find_middle(struct Node *head) {
     return slow; // Points to the middle element
 }
 
+// Function to check if a linked list contains a cycle (Floyd's Algorithm)
+int has_cycle(struct Node *head) {
+    if (head == NULL) return 0; // 0 = No cycle
+
+    struct Node *slow = head;
+    struct Node *fast = head;
+
+    while (fast != NULL && fast->link != NULL) {
+        slow = slow->link;         // Moves 1 step
+        fast = fast->link->link;   // Moves 2 steps
+
+        if (slow == fast) {
+            return 1; // 1 = Cycle detected!
+        }
+    }
+
+    return 0; // Reached end of list -> No cycle
+}
+
+// Function to find the starting node of a cycle
+struct Node* detect_cycle_start(struct Node *head) {
+    if (head == NULL) return NULL;
+
+    struct Node *slow = head;
+    struct Node *fast = head;
+    int has_loop = 0;
+
+    // Phase 1: Detect if a cycle exists
+    while (fast != NULL && fast->link != NULL) {
+        slow = slow->link;
+        fast = fast->link->link;
+
+        if (slow == fast) {
+            has_loop = 1;
+            break;
+        }
+    }
+
+    // If no cycle exists, return NULL
+    if (!has_loop) return NULL;
+
+    // Phase 2: Reset slow to head and move both pointers 1 step at a time
+    slow = head;
+    while (slow != fast) {
+        slow = slow->link;
+        fast = fast->link;
+    }
+
+    return slow; // Returns pointer to the exact entry node of the loop
+}
+
 int main() {
     struct Node *head = NULL;
 
@@ -171,29 +222,32 @@ int main() {
     printf("Original List:\n");
     print_list(head); // Prints: 10 -> 20 -> 30 -> 40 -> NULL
 
-    // Test find_middle on even length list (4 nodes)
-    struct Node *mid = find_middle(head);
-    if (mid != NULL) {
-        printf("Middle node value (even length): %d\n", mid->data); // Prints: 30
+    // 2. Test detect_cycle_start on a normal linear list
+    struct Node *cycle_start = detect_cycle_start(head);
+    if (cycle_start != NULL) {
+        printf("Cycle start detected at node value: %d\n", cycle_start->data);
+    } else {
+        printf("No cycle start found in linear list. (Correct!)\n");
     }
 
-    // 2. Reverse the list
-    head = reverse_list(head);
-
-    printf("\nList after reverse_list:\n");
-    print_list(head); // Prints: 40 -> 30 -> 20 -> 10 -> NULL
-
-    // 3. Delete tail of reversed list (deletes 10, leaving 3 nodes)
-    head = delete_tail(head);
-
-    printf("\nList after delete_tail:\n");
-    print_list(head); // Prints: 40 -> 30 -> 20 -> NULL
-
-    // Test find_middle on odd length list (3 nodes)
-    mid = find_middle(head);
-    if (mid != NULL) {
-        printf("Middle node value (odd length): %d\n", mid->data); // Prints: 30
+    // 3. Manually create a cycle for testing (40 -> 20)
+    struct Node *p = head;
+    while (p->link != NULL) {
+        p = p->link;
     }
+    // Point tail's link back to second node (20)
+    p->link = head->link; 
+
+    // 4. Test detect_cycle_start on cyclic list
+    cycle_start = detect_cycle_start(head);
+    if (cycle_start != NULL) {
+        printf("Cycle start detected successfully at node value: %d (Expected: 20)\n", cycle_start->data);
+    } else {
+        printf("Failed to detect cycle start.\n");
+    }
+
+    // Clean up cycle before program ends so memory can be safely handled
+    p->link = NULL;
 
     return 0;
 }
