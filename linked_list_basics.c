@@ -210,6 +210,27 @@ struct Node* detect_cycle_start(struct Node *head) {
     return slow; // Returns pointer to the exact entry node of the loop
 }
 
+// Function to remove a cycle from a linked list
+struct Node* remove_cycle(struct Node *head) {
+    struct Node *start_node = detect_cycle_start(head);
+
+    // If no cycle exists, nothing to break
+    if (start_node == NULL) {
+        return head;
+    }
+
+    // Traverse to the node right before start_node inside the cycle
+    struct Node *p = start_node;
+    while (p->link != start_node) {
+        p = p->link;
+    }
+
+    // Break the loop
+    p->link = NULL;
+
+    return head;
+}
+
 int main() {
     struct Node *head = NULL;
 
@@ -246,8 +267,18 @@ int main() {
         printf("Failed to detect cycle start.\n");
     }
 
-    // Clean up cycle before program ends so memory can be safely handled
-    p->link = NULL;
+    // 5. Test remove_cycle to break the loop programmatically
+    head = remove_cycle(head);
+
+    printf("\nList after remove_cycle:\n");
+    print_list(head); // Safely prints: 10 -> 20 -> 30 -> 40 -> NULL
+
+    // Verify cycle is completely gone
+    if (has_cycle(head)) {
+        printf("Failed to remove cycle.\n");
+    } else {
+        printf("Cycle removed successfully! List is linear again. (Correct!)\n");
+    }
 
     return 0;
 }
