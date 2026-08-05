@@ -63,6 +63,24 @@ void print_backward(struct Node *head) {
     printf("NULL\n");
 }
 
+// Function to delete the head node in a Doubly Linked List
+struct Node* delete_head(struct Node *head) {
+    if (head == NULL) {
+        printf("List is empty, nothing to delete!\n");
+        return NULL;
+    }
+
+    struct Node *p = head; // Save current head
+    head = head->next;    // Advance head to the next node
+
+    if (head != NULL) {
+        head->prev = NULL; // Unlink backward pointer of the new head
+    }
+
+    free(p); // Release old head memory
+    return head;
+}
+
 int main() {
     struct Node *head = NULL;
 
@@ -71,9 +89,16 @@ int main() {
     head = insert_head(head, 20);
     head = insert_head(head, 30);
 
-    // Verify bidirectional traversal
+    printf("--- Before Deletion ---\n");
     print_forward(head);  // Prints: Forward: 30 -> 20 -> 10 -> NULL
     print_backward(head); // Prints: Backward: 10 -> 20 -> 30 -> NULL
+
+    // Delete head node (removes 30)
+    head = delete_head(head);
+
+    printf("\n--- After Deleting Head ---\n");
+    print_forward(head);  // Prints: Forward: 20 -> 10 -> NULL
+    print_backward(head); // Prints: Backward: 10 -> 20 -> NULL
 
     return 0;
 }
