@@ -81,24 +81,63 @@ struct Node* delete_head(struct Node *head) {
     return head;
 }
 
+// Function to insert at the tail in O(1) time
+struct Node* insert_tail(struct Node *head, struct Node **tail, int val) {
+    struct Node *p = create_node(val);
+    if (p == NULL) return head;
+
+    if (head == NULL) {
+        *tail = p;
+        return p; // List was empty, p is now head and tail
+    }
+
+    (*tail)->next = p;
+    p->prev = *tail;
+    *tail = p; // Update tail pointer
+    
+    return head;
+}
+
+// Function to delete tail in O(1) time
+struct Node* delete_tail(struct Node *head, struct Node **tail) {
+    if (*tail == NULL) {
+        printf("List is empty!\n");
+        return NULL;
+    }
+
+    struct Node *p = *tail;
+
+    if (head == *tail) { // Only one node in list
+        head = NULL;
+        *tail = NULL;
+    } else {
+        *tail = (*tail)->prev;
+        (*tail)->next = NULL;
+    }
+
+    free(p);
+    return head;
+}
+
 int main() {
     struct Node *head = NULL;
+    struct Node *tail = NULL; // Track tail node explicitly
 
-    // Build the list using insert_head
-    head = insert_head(head, 10);
-    head = insert_head(head, 20);
-    head = insert_head(head, 30);
+    // 1. Build list using insert_tail (O(1))
+    head = insert_tail(head, &tail, 10);
+    head = insert_tail(head, &tail, 20);
+    head = insert_tail(head, &tail, 30);
 
-    printf("--- Before Deletion ---\n");
-    print_forward(head);  // Prints: Forward: 30 -> 20 -> 10 -> NULL
-    print_backward(head); // Prints: Backward: 10 -> 20 -> 30 -> NULL
+    printf("--- Initial List (Inserted 10, 20, 30 at Tail) ---\n");
+    print_forward(head);  // Forward: 10 -> 20 -> 30 -> NULL
+    print_backward(head); // Backward: 30 -> 20 -> 10 -> NULL
 
-    // Delete head node (removes 30)
-    head = delete_head(head);
+    // 2. Delete Tail (removes 30)
+    head = delete_tail(head, &tail);
 
-    printf("\n--- After Deleting Head ---\n");
-    print_forward(head);  // Prints: Forward: 20 -> 10 -> NULL
-    print_backward(head); // Prints: Backward: 10 -> 20 -> NULL
+    printf("\n--- After Deleting Tail ---\n");
+    print_forward(head);  // Forward: 10 -> 20 -> NULL
+    print_backward(head); // Backward: 20 -> 10 -> NULL
 
     return 0;
 }
