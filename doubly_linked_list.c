@@ -119,6 +119,33 @@ struct Node* delete_tail(struct Node *head, struct Node **tail) {
     return head;
 }
 
+// Function to reverse a Doubly Linked List in-place
+struct Node* reverse_dll(struct Node *head) {
+    if (head == NULL || head->next == NULL) {
+        return head; // 0 or 1 node, no reversal needed
+    }
+
+    struct Node *curr = head;
+    struct Node *temp = NULL;
+
+    // Swap next and prev pointers for all nodes
+    while (curr != NULL) {
+        temp = curr->prev;
+        curr->prev = curr->next;
+        curr->next = temp;
+
+        // Move to the next node in original list (which is now curr->prev)
+        curr = curr->prev;
+    }
+
+    // Update head to point to the new front node
+    if (temp != NULL) {
+        head = temp->prev;
+    }
+
+    return head;
+}
+
 int main() {
     struct Node *head = NULL;
     struct Node *tail = NULL; // Track tail node explicitly
@@ -128,16 +155,16 @@ int main() {
     head = insert_tail(head, &tail, 20);
     head = insert_tail(head, &tail, 30);
 
-    printf("--- Initial List (Inserted 10, 20, 30 at Tail) ---\n");
+    printf("--- Initial List (10 -> 20 -> 30) ---\n");
     print_forward(head);  // Forward: 10 -> 20 -> 30 -> NULL
     print_backward(head); // Backward: 30 -> 20 -> 10 -> NULL
 
-    // 2. Delete Tail (removes 30)
-    head = delete_tail(head, &tail);
+    // 2. Reverse the list in-place
+    head = reverse_dll(head);
 
-    printf("\n--- After Deleting Tail ---\n");
-    print_forward(head);  // Forward: 10 -> 20 -> NULL
-    print_backward(head); // Backward: 20 -> 10 -> NULL
+    printf("\n--- After In-Place Reversal ---\n");
+    print_forward(head);  // Forward: 30 -> 20 -> 10 -> NULL
+    print_backward(head); // Backward: 10 -> 20 -> 30 -> NULL
 
     return 0;
 }
