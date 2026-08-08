@@ -146,20 +146,66 @@ struct Node* reverse_dll(struct Node *head) {
     return head;
 }
 
+// Function to insert at any given position in a Doubly Linked List
+struct Node* insert_at_pos(struct Node *head, struct Node **tail, int val, int pos) {
+    if (pos < 1) {
+        printf("Invalid position!\n");
+        return head;
+    }
+
+    // 1. Position 1 is Head Insertion
+    if (pos == 1) {
+        return insert_head(head, val);
+    }
+
+    struct Node *curr = head;
+    // Step pos - 2 times to land on the node right BEFORE the target spot
+    for (int i = 1; i < pos - 1 && curr != NULL; i++) {
+        curr = curr->next;
+    }
+
+    if (curr == NULL) {
+        printf("Position out of bounds!\n");
+        return head;
+    }
+
+    // 2. Inserting at the very end is Tail Insertion
+    if (curr->next == NULL) {
+        return insert_tail(head, tail, val);
+    }
+
+    // 3. Middle Insertion (Connect 4 pointers cleanly)
+    struct Node *p = create_node(val);
+    if (p == NULL) return head;
+
+    p->next = curr->next;
+    p->prev = curr;
+    curr->next->prev = p; // Connect node AFTER p back to p
+    curr->next = p;       // Connect curr node forward to p
+
+    return head;
+}
+
 int main() {
     struct Node *head = NULL;
-    struct Node *tail = NULL; // Track tail node explicitly
+    struct Node *tail = NULL;
 
     // 1. Build list using insert_tail (O(1))
     head = insert_tail(head, &tail, 10);
-    head = insert_tail(head, &tail, 20);
     head = insert_tail(head, &tail, 30);
 
-    printf("--- Initial List (10 -> 20 -> 30) ---\n");
+    printf("--- Initial List (10 -> 30) ---\n");
+    print_forward(head);  // Forward: 10 -> 30 -> NULL
+    print_backward(head); // Backward: 30 -> 10 -> NULL
+
+    // 2. Insert 20 at position 2 (Middle Insertion)
+    head = insert_at_pos(head, &tail, 20, 2);
+
+    printf("\n--- After Inserting 20 at Position 2 ---\n");
     print_forward(head);  // Forward: 10 -> 20 -> 30 -> NULL
     print_backward(head); // Backward: 30 -> 20 -> 10 -> NULL
 
-    // 2. Reverse the list in-place
+    // 3. Reverse in-place
     head = reverse_dll(head);
 
     printf("\n--- After In-Place Reversal ---\n");
