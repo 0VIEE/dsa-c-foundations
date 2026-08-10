@@ -231,6 +231,7 @@ struct Node* remove_cycle(struct Node *head) {
     return head;
 }
 
+
 int main() {
     struct Node *head = NULL;
 

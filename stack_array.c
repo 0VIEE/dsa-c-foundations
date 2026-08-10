@@ -1,62 +1,67 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 100
-
-struct Stack {
-    int arr[MAX];
-    int top;
+struct Node {
+    int data;
+    struct Node *next;
 };
 
-// Initialize stack
-void init_stack(struct Stack *s) {
-    s->top = -1;
-}
-
-// Push element - O(1)
-void push(struct Stack *s, int val) {
-    if (s->top == MAX - 1) {
-        printf("Stack Overflow! Cannot push %d\n", val);
-        return;
+// Push onto dynamic stack - O(1)
+struct Node* push_ll(struct Node *top, int val) {
+    struct Node *p = (struct Node*)malloc(sizeof(struct Node));
+    if (p == NULL) {
+        printf("Stack Overflow! Memory allocation failed.\n");
+        return top;
     }
-    s->top++;
-    s->arr[s->top] = val;
+    p->data = val;
+    p->next = top; // New node points to old top
+    top = p;       // Update top pointer
     printf("Pushed %d onto stack\n", val);
+    return top;
 }
 
-// Pop element - O(1)
-int pop(struct Stack *s) {
-    if (s->top == -1) {
-        printf("Stack Underflow! Stack is empty\n");
-        return -1;
+// Pop from dynamic stack - O(1)
+struct Node* pop_ll(struct Node *top, int *popped_val) {
+    if (top == NULL) {
+        printf("Stack Underflow! Stack is empty.\n");
+        *popped_val = -1;
+        return NULL;
     }
-    int val = s->arr[s->top];
-    s->top--;
-    return val;
+    struct Node *p = top;
+    *popped_val = p->data;
+    top = top->next; // Advance top to next node
+    free(p);         // Release memory
+    return top;
 }
 
 // Peek top element - O(1)
-int peek(struct Stack *s) {
-    if (s->top == -1) {
+int peek_ll(struct Node *top) {
+    if (top == NULL) {
         printf("Stack is empty!\n");
         return -1;
     }
-    return s->arr[s->top];
+    return top->data;
 }
 
 int main() {
-    printf("=== Testing Array-Based Stack ===\n");
-    struct Stack s;
-    init_stack(&s);
+    printf("=== Testing Linked List-Based Stack ===\n");
+    struct Node *top = NULL; // Initialize empty stack
 
-    push(&s, 10);
-    push(&s, 20);
-    push(&s, 30);
+    // Push 100, 200, 300
+    top = push_ll(top, 100);
+    top = push_ll(top, 200);
+    top = push_ll(top, 300);
 
-    printf("Current Top Element (Peek): %d\n", peek(&s)); // 30
+    // Peek top element (should be 300)
+    printf("Current Top Element (Peek): %d\n", peek_ll(top));
 
-    printf("Popped Element: %d\n", pop(&s));              // Removes 30
-    printf("New Top Element (Peek): %d\n", peek(&s));     // 20
+    // Pop top element (removes 300)
+    int popped;
+    top = pop_ll(top, &popped);
+    printf("Popped Element: %d\n", popped);
+
+    // Peek top element again (should be 200)
+    printf("New Top Element (Peek): %d\n", peek_ll(top));
 
     return 0;
 }
