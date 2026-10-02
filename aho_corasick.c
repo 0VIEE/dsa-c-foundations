@@ -1,176 +1,126 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
+#define MAX_NODES 128
 #define ALPHABET_SIZE 26
-#define MAX_STATES 100
 
-struct TrieNode {
-    struct TrieNode *link[ALPHABET_SIZE];
-    struct TrieNode *fail;
-    int pattern_id; // -1 if not a terminal match
+struct ACNode {
+    int next[ALPHABET_SIZE];
+    int link;      // Failure link
+    int dict_link; // Dictionary suffix link
+    int is_terminal;
+    char pattern[32];
 };
 
-struct TrieNode* create_node() {
-    struct TrieNode *p = (struct TrieNode*)malloc(sizeof(struct TrieNode));
-    p->fail = NULL;
-    p->pattern_id = -1;
+struct ACAry {
+    struct ACNode nodes[MAX_NODES];
+    int sz;
+};
+
+struct ACAry* create_ac() {
+    struct ACAry *ac = (struct ACAry*)malloc(sizeof(struct ACAry));
+    ac->sz = 1;
     for (int i = 0; i < ALPHABET_SIZE; i++) {
-        p->link[i] = NULL;
+        ac->nodes[0].next[i] = 0;
     }
-    return p;
+    ac->nodes[0].link = 0;
+    ac->nodes[0].dict_link = 0;
+    ac->nodes[0].is_terminal = 0;
+    return ac;
 }
 
-// Insert pattern into Trie
-void insert_pattern(struct TrieNode *root, const char *pat, int id) {
-    struct TrieNode *p = root;
+void insert_pattern(struct ACAry *ac, const char *pat) {
+    int u = 0;
     for (int i = 0; pat[i] != '\0'; i++) {
-        int idx = pat[i] - 'a';
-        if (p->link[idx] == NULL) {
-            p->link[idx] = create_node();
+        int c = pat[i] - 'a';
+        if (ac->nodes[u].next[c] == 0) {
+            int new_node = ac->sz++;
+            for (int j = 0; j < ALPHABET_SIZE; j++) {
+                ac->nodes[new_node].next[j] = 0;
+            }
+            ac->nodes[new_node].link = 0;
+            ac->nodes[new_node].dict_link = 0;
+            ac->nodes[new_node].is_terminal = 0;
+            ac->nodes[u].next[c] = new_node;
         }
-        p = p->link[idx];
+        u = ac->nodes[u].next[c];
     }
-    p->pattern_id = id;
+    ac->nodes[u].is_terminal = 1;
+    strcpy(ac->nodes[u].pattern, pat);
 }
 
-// Queue for BFS failure link construction
-struct QueueNode {
-    struct TrieNode *data;
-    struct QueueNode *link;
-};
+void build_automaton(struct ACAry *ac) {
+    int queue[MAX_NODES];
+    int head = 0, tail = 0;
 
-struct Queue {
-    struct QueueNode *front;
-    struct QueueNode *rear;
-};
-
-struct Queue* create_queue() {
-    struct Queue *q = (struct Queue*)malloc(sizeof(struct Queue));
-    q->front = NULL;
-    q->rear = NULL;
-    return q;
-}
-
-void enqueue(struct Queue *q, struct TrieNode *node) {
-    struct QueueNode *p = (struct QueueNode*)malloc(sizeof(struct QueueNode));
-    p->data = node;
-    p->link = NULL;
-    if (q->rear == NULL) {
-        q->front = p;
-        q->rear = p;
-        return;
-    }
-    q->rear->link = p;
-    q->rear = p;
-}
-
-struct TrieNode* dequeue(struct Queue *q) {
-    if (q->front == NULL) return NULL;
-    struct QueueNode *p = q->front;
-    struct TrieNode *val = p->data;
-    q->front = q->front->link;
-    if (q->front == NULL) q->rear = NULL;
-    free(p);
-    return val;
-}
-
-bool is_queue_empty(struct Queue *q) {
-    return q->front == NULL;
-}
-
-// Build BFS Failure Links
-void build_failure_links(struct TrieNode *root) {
-    struct Queue *q = create_queue();
-
-    // Depth 1 states fail back to root
-    for (int i = 0; i < ALPHABET_SIZE; i++) {
-        if (root->link[i] != NULL) {
-            root->link[i]->fail = root;
-            enqueue(q, root->link[i]);
+    // Initialize root's children
+    for (int c = 0; c < ALPHABET_SIZE; c++) {
+        int v = ac->nodes[0].next[c];
+        if (v != 0) {
+            ac->nodes[v].link = 0;
+            queue[tail++] = v;
         }
     }
 
-    while (!is_queue_empty(q)) {
-        struct TrieNode *u = dequeue(q);
+    while (head < tail) {
+        int u = queue[head++];
+        
+        // Set dictionary link
+        int fail = ac->nodes[u].link;
+        if (ac->nodes[fail].is_terminal) {
+            ac->nodes[u].dict_link = fail;
+        } else {
+            ac->nodes[u].dict_link = ac->nodes[fail].dict_link;
+        }
 
-        for (int i = 0; i < ALPHABET_SIZE; i++) {
-            if (u->link[i] != NULL) {
-                struct TrieNode *v = u->link[i];
-                struct TrieNode *f = u->fail;
-
-                while (f != NULL && f->link[i] == NULL) {
-                    f = f->fail;
-                }
-                v->fail = (f != NULL) ? f->link[i] : root;
-                enqueue(q, v);
+        for (int c = 0; c < ALPHABET_SIZE; c++) {
+            int v = ac->nodes[u].next[c];
+            if (v != 0) {
+                ac->nodes[v].link = ac->nodes[fail].next[c];
+                queue[tail++] = v;
+            } else {
+                ac->nodes[u].next[c] = ac->nodes[fail].next[c];
             }
         }
     }
-    free(q);
 }
 
-// Search text for all patterns simultaneously
-void aho_corasick_search(struct TrieNode *root, const char *text, const char *patterns[]) {
-    struct TrieNode *p = root;
-    int n = strlen(text);
+void search_text(struct ACAry *ac, const char *text) {
+    int u = 0;
+    printf("Searching text: \"%s\"\n", text);
+    for (int i = 0; text[i] != '\0'; i++) {
+        int c = text[i] - 'a';
+        u = ac->nodes[u].next[c];
 
-    printf("Search Text: \"%s\"\n", text);
-    printf("Matches detected:\n");
-
-    for (int i = 0; i < n; i++) {
-        int idx = text[i] - 'a';
-
-        // Follow failure links if current transition doesn't exist
-        while (p != NULL && p->link[idx] == NULL) {
-            p = p->fail;
-        }
-
-        p = (p == NULL) ? root : p->link[idx];
-
-        // Check matches at current node and along failure chain
-        struct TrieNode *temp = p;
-        while (temp != NULL) {
-            if (temp->pattern_id != -1) {
-                int id = temp->pattern_id;
-                int start_pos = i - strlen(patterns[id]) + 1;
-                printf("  -> Pattern [ID %d: \"%s\"] at text index %d\n", id, patterns[id], start_pos);
+        // Check current node and dictionary links for matches
+        int temp = u;
+        while (temp != 0) {
+            if (ac->nodes[temp].is_terminal) {
+                printf("  -> Found pattern \"%s\" ending at index %d\n", 
+                       ac->nodes[temp].pattern, i);
             }
-            temp = temp->fail;
+            temp = ac->nodes[temp].dict_link;
         }
     }
-    printf("\n");
-}
-
-void free_trie(struct TrieNode *root) {
-    if (root == NULL) return;
-    for (int i = 0; i < ALPHABET_SIZE; i++) {
-        if (root->link[i] != NULL) {
-            free_trie(root->link[i]);
-        }
-    }
-    free(root);
 }
 
 int main() {
-    struct TrieNode *root = create_node();
+    /*
+        Patterns to search: "he", "she", "his", "hers"
+        Text: "ushers"
+    */
+    struct ACAry *ac = create_ac();
+    insert_pattern(ac, "he");
+    insert_pattern(ac, "she");
+    insert_pattern(ac, "his");
+    insert_pattern(ac, "hers");
 
-    const char *patterns[] = {"he", "she", "his", "hers"};
-    int k = sizeof(patterns) / sizeof(patterns[0]);
+    build_automaton(ac);
 
-    for (int i = 0; i < k; i++) {
-        insert_pattern(root, patterns[i], i);
-    }
+    char *text = "ushers";
+    search_text(ac, text);
 
-    build_failure_links(root);
-
-    printf("=== Aho-Corasick Multi-Pattern Search Engine ===\n");
-    printf("Registered Patterns: [ \"he\", \"she\", \"his\", \"hers\" ]\n\n");
-
-    const char *text = "ahishers";
-    aho_corasick_search(root, text, patterns);
-
-    free_trie(root);
+    free(ac);
     return 0;
 }
