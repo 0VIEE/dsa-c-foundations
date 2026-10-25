@@ -45,6 +45,17 @@ Run the program with `./graph_bfs` on Linux/macOS or `graph_bfs.exe` on Windows.
 
 These commands are starting points, not a guarantee that every file builds with identical options. Check each source file for required inputs, dependencies, compiler settings, and limitations.
 
+## Checks
+
+The repository includes a GCC compile sweep and targeted smoke tests:
+
+```bash
+bash scripts/compile_all.sh
+bash scripts/test_examples.sh
+```
+
+See [tests/README.md](tests/README.md) for the scope and limitations of these checks. The compile sweep is also run by GitHub Actions.
+
 ## Project Status and Quality
 
 This is a learning repository, not a claim that every implementation is production-ready. Completeness, correctness testing, and performance characteristics vary, especially for memory-management and concurrency experiments.
