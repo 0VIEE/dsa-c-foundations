@@ -99,6 +99,12 @@ assert_contains "$tmpdir/trie.out" ' -> category'
 assert_contains "$tmpdir/trie.out" 'No suggestions found for prefix "xyz"'
 echo "PASS trie autocomplete example"
 
+compile_example "tests/test_trie_autocomplete.c" "$tmpdir/test_trie"
+"$tmpdir/test_trie" > "$tmpdir/test_trie.out"
+assert_contains "$tmpdir/test_trie.out" ' -> cater'
+assert_contains "$tmpdir/test_trie.out" 'PASS trie autocomplete input-validation tests'
+echo "PASS trie autocomplete edge tests"
+
 compile_example "tests/test_aho_corasick_array.c" "$tmpdir/test_aho_array"
 "$tmpdir/test_aho_array" > "$tmpdir/test_aho_array.out"
 assert_contains "$tmpdir/test_aho_array.out" 'PASS fixed-array Aho-Corasick edge cases'
