@@ -166,7 +166,7 @@ void free_graph(struct Graph *g) {
 
 int main() {
     /*
-        Same 5-edge, 4-vertex graph from Day 69:
+        Weighted undirected graph:
         0 - 1 (10), 0 - 2 (6), 0 - 3 (5), 1 - 3 (15), 2 - 3 (4)
     */
     int V = 4;
