@@ -3,13 +3,13 @@
 #include <string.h>
 
 #define MAX_NODES 32
-#define INF 1e9
+#define INF 1000000000
 
 struct Edge {
     int to;
     int capacity;
     int flow;
-    int rev; // Index of the reverse edge in the adjacency list of 'to'
+    struct Edge *rev; // Paired residual edge
     struct Edge *link;
 };
 
@@ -19,7 +19,11 @@ struct Graph {
 };
 
 struct Graph* create_graph(int n) {
+    if (n <= 0 || n > MAX_NODES) return NULL;
+
     struct Graph *g = (struct Graph*)malloc(sizeof(struct Graph));
+    if (g == NULL) return NULL;
+
     g->n = n;
     for (int i = 0; i < n; i++) {
         g->adj[i] = NULL;
@@ -27,27 +31,36 @@ struct Graph* create_graph(int n) {
     return g;
 }
 
-// Add a directed edge with capacity and its reverse residual edge with 0 capacity
-void add_edge(struct Graph *g, int u, int v, int cap) {
-    // Forward edge u -> v
+// Add a directed edge and its paired reverse residual edge.
+int add_edge(struct Graph *g, int u, int v, int cap) {
+    if (g == NULL || u < 0 || u >= g->n || v < 0 || v >= g->n ||
+        u == v || cap < 0) {
+        return 0;
+    }
+
     struct Edge *a = (struct Edge*)malloc(sizeof(struct Edge));
+    struct Edge *b = (struct Edge*)malloc(sizeof(struct Edge));
+    if (a == NULL || b == NULL) {
+        free(a);
+        free(b);
+        return 0;
+    }
+
     a->to = v;
     a->capacity = cap;
     a->flow = 0;
+    a->rev = b;
     a->link = g->adj[u];
 
-    // Backward edge v -> u
-    struct Edge *b = (struct Edge*)malloc(sizeof(struct Edge));
     b->to = u;
     b->capacity = 0;
     b->flow = 0;
+    b->rev = a;
     b->link = g->adj[v];
-
-    a->rev = 0; // Will link indices correctly
-    b->rev = 0;
 
     g->adj[u] = a;
     g->adj[v] = b;
+    return 1;
 }
 
 int level[MAX_NODES];
@@ -89,28 +102,25 @@ int dfs(struct Graph *g, int u, int t, int pushed) {
         if (tr == 0) continue;
 
         e->flow += tr;
-        // Find and update reverse edge flow (simplified for demonstration)
-        struct Edge *rev_e = g->adj[v];
-        while (rev_e != NULL) {
-            if (rev_e->to == u) {
-                rev_e->flow -= tr;
-                break;
-            }
-            rev_e = rev_e->link;
-        }
-
+        e->rev->flow -= tr;
         return tr;
     }
     return 0;
 }
 
 int dinic_max_flow(struct Graph *g, int s, int t) {
+    if (g == NULL || s < 0 || s >= g->n || t < 0 || t >= g->n || s == t) {
+        return 0;
+    }
+
     int flow = 0;
     while (bfs(g, s, t)) {
         for (int i = 0; i < g->n; i++) {
             ptr[i] = g->adj[i];
         }
-        while (int pushed = dfs(g, s, t, INF)) {
+        for (;;) {
+            int pushed = dfs(g, s, t, INF);
+            if (pushed == 0) break;
             flow += pushed;
         }
     }
@@ -118,6 +128,8 @@ int dinic_max_flow(struct Graph *g, int s, int t) {
 }
 
 void free_graph(struct Graph *g) {
+    if (g == NULL) return;
+
     for (int i = 0; i < g->n; i++) {
         struct Edge *e = g->adj[i];
         while (e != NULL) {
@@ -143,17 +155,25 @@ int main() {
     */
     int n = 6;
     struct Graph *g = create_graph(n);
+    if (g == NULL) {
+        fprintf(stderr, "Failed to create graph.\n");
+        return EXIT_FAILURE;
+    }
 
-    add_edge(g, 0, 1, 10);
-    add_edge(g, 0, 2, 10);
-    add_edge(g, 1, 3, 4);
-    add_edge(g, 1, 4, 8);
-    add_edge(g, 1, 2, 2);
-    add_edge(g, 2, 4, 9);
-    add_edge(g, 2, 5, 10);
-    add_edge(g, 3, 5, 10);
-    add_edge(g, 4, 3, 6);
-    add_edge(g, 4, 5, 10);
+    if (!add_edge(g, 0, 1, 10) ||
+        !add_edge(g, 0, 2, 10) ||
+        !add_edge(g, 1, 3, 4) ||
+        !add_edge(g, 1, 4, 8) ||
+        !add_edge(g, 1, 2, 2) ||
+        !add_edge(g, 2, 4, 9) ||
+        !add_edge(g, 2, 5, 10) ||
+        !add_edge(g, 3, 5, 10) ||
+        !add_edge(g, 4, 3, 6) ||
+        !add_edge(g, 4, 5, 10)) {
+        fprintf(stderr, "Failed to add graph edge.\n");
+        free_graph(g);
+        return EXIT_FAILURE;
+    }
 
     int max_flow = dinic_max_flow(g, 0, 5);
 
