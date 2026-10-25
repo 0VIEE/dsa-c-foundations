@@ -92,6 +92,11 @@ assert_contains "$tmpdir/fenwick.out" 'New Range Sum [3, 6]:     20'
 assert_contains "$tmpdir/fenwick.out" 'New Prefix Sum up to 5:   21'
 echo "PASS Fenwick tree example"
 
+compile_example "tests/test_fenwick_tree.c" "$tmpdir/test_fenwick"
+"$tmpdir/test_fenwick" > "$tmpdir/test_fenwick.out"
+assert_contains "$tmpdir/test_fenwick.out" 'PASS Fenwick tree boundary tests'
+echo "PASS Fenwick tree edge tests"
+
 compile_example "data-structures/tries/trie_autocomplete.c" "$tmpdir/trie"
 "$tmpdir/trie" > "$tmpdir/trie.out"
 assert_contains "$tmpdir/trie.out" 'Autocomplete suggestions for "cat":'
