@@ -14,8 +14,8 @@ This folder collects graph representations, traversal methods, shortest-path alg
 | [graph_cycle_detect.c](graph_cycle_detect.c) | Graph cycle detection |
 | [graph_topo_sort.c](graph_topo_sort.c) | Topological sorting |
 | [word_ladder_bfs.c](word_ladder_bfs.c) | Word Ladder search using BFS |
-| [prim_mst.c](prim_mst.c) | Prim's minimum spanning tree implementation using an adjacency list and min-heap |
-| [prims_mst.c](prims_mst.c) | Prim's minimum spanning tree implementation using an adjacency matrix |
+| [prim_mst_heap.c](prim_mst_heap.c) | Prim's minimum spanning tree using an adjacency list and min-heap |
+| [prim_mst_matrix.c](prim_mst_matrix.c) | Prim's minimum spanning tree using an adjacency matrix |
 | [dsu_optimized.c](dsu_optimized.c) | Disjoint Set Union (Union-Find) |
 | [tarjan_articulation_points.c](tarjan_articulation_points.c) | Articulation points |
 | [tarjan_bridges.c](tarjan_bridges.c) | Bridges in a graph |
@@ -32,4 +32,4 @@ gcc algorithms/graphs/graph_bfs.c -std=c11 -Wall -Wextra -Wpedantic -o graph_bfs
 
 Run it on Linux/macOS with `./graph_bfs`, or on Windows with `graph_bfs.exe`.
 
-Examples may use different input assumptions or compiler requirements. Check the source file before choosing compiler options; this index does not imply that every implementation has been fully tested.
+Examples may use different input assumptions or compiler requirements. Check the source file before choosing compiler options; this index describes each program's focus, not a guarantee of complete correctness coverage.
