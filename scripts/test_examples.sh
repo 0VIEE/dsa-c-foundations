@@ -63,6 +63,12 @@ assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 10 ] (To
 assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 0 2 5 8 10 12 ] (Total: 6)'
 echo "PASS KMP string search"
 
+compile_example "tests/test_kmp_search.c" "$tmpdir/test_kmp"
+"$tmpdir/test_kmp" > "$tmpdir/test_kmp.out"
+assert_contains "$tmpdir/test_kmp.out" 'Occurrences found at text indices: [ 0 1 2 ] (Total: 3)'
+assert_contains "$tmpdir/test_kmp.out" 'PASS KMP invalid-input and overlapping-match tests'
+echo "PASS KMP edge tests"
+
 compile_example "algorithms/graphs/prim_mst_heap.c" "$tmpdir/prim_list"
 "$tmpdir/prim_list" > "$tmpdir/prim_list.out"
 assert_contains "$tmpdir/prim_list.out" 'Total MST Weight: 19'
