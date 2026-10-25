@@ -51,9 +51,10 @@ Run the repository-wide compile check and targeted smoke tests in a Bash environ
 ```bash
 bash scripts/compile_all.sh
 bash scripts/test_examples.sh
+bash scripts/test_sanitizers.sh
 ```
 
-The compile check builds every C source file with C11 and common warnings treated as errors. The smoke tests verify expected output from representative algorithms and exercise invalid-input and boundary cases in the Aho–Corasick, KMP, trie, and Fenwick tree examples. GitHub Actions runs these checks on pushes and pull requests.
+The compile check builds every C source file with C11 and common warnings treated as errors. The smoke tests verify expected output from representative algorithms and exercise invalid-input and boundary cases in the Aho–Corasick, KMP, trie, and Fenwick tree examples. GitHub Actions runs the compile sweep, smoke tests, and address/undefined-behavior sanitizer checks on pushes and pull requests.
 
 See [tests/README.md](tests/README.md) for coverage and limitations.
 
