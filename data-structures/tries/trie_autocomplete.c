@@ -11,36 +11,61 @@ struct TrieNode {
     bool is_end_of_word;
 };
 
-// Create a new Trie node
-struct TrieNode* create_node() {
-    struct TrieNode *p = (struct TrieNode*)malloc(sizeof(struct TrieNode));
-    if (p == NULL) return NULL;
-
-    p->is_end_of_word = false;
-    for (int i = 0; i < ALPHABET_SIZE; i++) {
-        p->link[i] = NULL;
+static int lowercase_index(unsigned char ch) {
+    if (ch < 'a' || ch > 'z') {
+        return -1;
     }
-    return p;
+    return ch - 'a';
 }
 
-// Insert word into Trie
-void insert(struct TrieNode *root, const char *key) {
-    struct TrieNode *p = root;
-    int len = strlen(key);
+static int valid_word(const char *word, int allow_empty) {
+    if (word == NULL) {
+        return 0;
+    }
 
-    for (int i = 0; i < len; i++) {
-        int index = key[i] - 'a';
-        if (p->link[index] == NULL) {
-            p->link[index] = create_node();
+    size_t len = strlen(word);
+    if ((!allow_empty && len == 0) || len >= MAX_WORD_LEN) {
+        return 0;
+    }
+
+    for (size_t i = 0; i < len; i++) {
+        if (lowercase_index((unsigned char)word[i]) < 0) {
+            return 0;
         }
-        p = p->link[index];
     }
-    p->is_end_of_word = true;
+    return 1;
 }
 
-// Recursive DFS to find and print all words under a prefix node
-void suggestions_rec(struct TrieNode *root, char curr_prefix[], int level) {
-    if (root == NULL) return;
+struct TrieNode *create_node(void) {
+    return (struct TrieNode *)calloc(1, sizeof(struct TrieNode));
+}
+
+/* Returns 1 on success; accepts non-empty lowercase words shorter than 50 chars. */
+int insert(struct TrieNode *root, const char *key) {
+    if (root == NULL || !valid_word(key, 0)) {
+        return 0;
+    }
+
+    struct TrieNode *node = root;
+    for (size_t i = 0; key[i] != '\0'; i++) {
+        int index = lowercase_index((unsigned char)key[i]);
+        if (node->link[index] == NULL) {
+            node->link[index] = create_node();
+            if (node->link[index] == NULL) {
+                return 0;
+            }
+        }
+        node = node->link[index];
+    }
+
+    node->is_end_of_word = true;
+    return 1;
+}
+
+void suggestions_rec(struct TrieNode *root, char curr_prefix[], size_t level) {
+    if (root == NULL) {
+        return;
+    }
 
     if (root->is_end_of_word) {
         curr_prefix[level] = '\0';
@@ -49,67 +74,80 @@ void suggestions_rec(struct TrieNode *root, char curr_prefix[], int level) {
 
     for (int i = 0; i < ALPHABET_SIZE; i++) {
         if (root->link[i] != NULL) {
-            curr_prefix[level] = 'a' + i;
+            curr_prefix[level] = (char)('a' + i);
             suggestions_rec(root->link[i], curr_prefix, level + 1);
         }
     }
 }
 
-// Find prefix and initiate suggestions
-void print_autocomplete_suggestions(struct TrieNode *root, const char *prefix) {
-    struct TrieNode *p = root;
-    int len = strlen(prefix);
+/* Returns 1 for a valid prefix, including when no words match it. */
+int print_autocomplete_suggestions(struct TrieNode *root, const char *prefix) {
+    if (root == NULL || !valid_word(prefix, 1)) {
+        return 0;
+    }
 
-    // Locate the node corresponding to prefix
-    for (int i = 0; i < len; i++) {
-        int index = prefix[i] - 'a';
-        if (p->link[index] == NULL) {
+    size_t len = strlen(prefix);
+    struct TrieNode *node = root;
+    for (size_t i = 0; i < len; i++) {
+        int index = lowercase_index((unsigned char)prefix[i]);
+        if (node->link[index] == NULL) {
             printf("No suggestions found for prefix \"%s\"\n", prefix);
-            return;
+            return 1;
         }
-        p = p->link[index];
+        node = node->link[index];
     }
 
     char curr_prefix[MAX_WORD_LEN];
-    strcpy(curr_prefix, prefix);
+    memcpy(curr_prefix, prefix, len + 1);
 
     printf("Autocomplete suggestions for \"%s\":\n", prefix);
-    suggestions_rec(p, curr_prefix, len);
+    suggestions_rec(node, curr_prefix, len);
+    return 1;
 }
 
-// Post-order free of Trie memory
 void free_trie(struct TrieNode *root) {
-    if (root == NULL) return;
+    if (root == NULL) {
+        return;
+    }
     for (int i = 0; i < ALPHABET_SIZE; i++) {
-        if (root->link[i] != NULL) {
-            free_trie(root->link[i]);
-        }
+        free_trie(root->link[i]);
     }
     free(root);
 }
 
-int main() {
+#ifndef TRIE_AUTOCOMPLETE_NO_MAIN
+int main(void) {
     struct TrieNode *root = create_node();
-
-    char dict[][MAX_WORD_LEN] = {
-        "cat", "cater", "category", "cattle", "candy", 
-        "can", "candle", "dog", "dodge", "door"
-    };
-    int n = sizeof(dict) / sizeof(dict[0]);
-
-    for (int i = 0; i < n; i++) {
-        insert(root, dict[i]);
+    if (root == NULL) {
+        fputs("Failed to allocate the trie root.\n", stderr);
+        return EXIT_FAILURE;
     }
 
-    printf("=== Trie Autocomplete Engine ===\n");
-    print_autocomplete_suggestions(root, "cat");
-    printf("\n");
-    print_autocomplete_suggestions(root, "can");
-    printf("\n");
-    print_autocomplete_suggestions(root, "do");
-    printf("\n");
-    print_autocomplete_suggestions(root, "xyz");
+    const char *dict[] = {
+        "cat", "cater", "category", "cattle", "candy",
+        "can", "candle", "dog", "dodge", "door"
+    };
+    size_t count = sizeof(dict) / sizeof(dict[0]);
+
+    for (size_t i = 0; i < count; i++) {
+        if (!insert(root, dict[i])) {
+            fputs("Failed to insert a dictionary word.\n", stderr);
+            free_trie(root);
+            return EXIT_FAILURE;
+        }
+    }
+
+    printf("=== Trie Autocomplete ===\n");
+    if (!print_autocomplete_suggestions(root, "cat") ||
+        !print_autocomplete_suggestions(root, "can") ||
+        !print_autocomplete_suggestions(root, "do") ||
+        !print_autocomplete_suggestions(root, "xyz")) {
+        fputs("Invalid autocomplete prefix.\n", stderr);
+        free_trie(root);
+        return EXIT_FAILURE;
+    }
 
     free_trie(root);
-    return 0;
+    return EXIT_SUCCESS;
 }
+#endif
