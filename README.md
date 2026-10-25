@@ -49,7 +49,7 @@ These commands are starting points, not a guarantee that every file builds with 
 
 This is a learning repository, not a claim that every implementation is production-ready. Completeness, correctness testing, and performance characteristics vary, especially for memory-management and concurrency experiments.
 
-Similarly named implementations have been retained rather than removed based on filenames alone. They should be compared and tested before any consolidation. Future improvements include reproducible tests, example inputs and outputs, and clearer notes on edge cases.
+Exact duplicate source files have been removed after comparing their contents; implementations that differ remain separate. Testing, edge-case coverage, and reproducible build checks are still ongoing. The string-algorithm index calls out known input and capacity limitations in the Aho–Corasick demonstrations.
 
 ---
 
