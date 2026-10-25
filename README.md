@@ -60,7 +60,7 @@ See [tests/README.md](tests/README.md) for the scope and limitations of these ch
 
 This is a learning repository, not a claim that every implementation is production-ready. Completeness, correctness testing, and performance characteristics vary, especially for memory-management and concurrency experiments.
 
-Exact duplicate source files have been removed after comparing their contents; implementations that differ remain separate. Testing, edge-case coverage, and reproducible build checks are still ongoing. The string-algorithm index calls out known input and capacity limitations in the Aho–Corasick demonstrations.
+Exact duplicate source files have been removed after comparing their contents; implementations that differ remain separate. GitHub Actions now compiles every C source file and runs targeted smoke tests, with sample cases documented in [tests/README.md](tests/README.md). This is a baseline rather than full correctness coverage; edge-case tests and stress testing are still needed, especially for concurrency and allocator experiments. The string-algorithm index calls out known input and capacity limitations in the Aho–Corasick demonstrations.
 
 ---
 
