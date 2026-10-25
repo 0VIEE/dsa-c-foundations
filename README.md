@@ -1,54 +1,50 @@
 # DSA C Foundations
 
-A collection of C implementations and experiments exploring data structures, algorithms, and systems programming.
+A learning-focused collection of C implementations and experiments covering data structures, algorithms, and systems programming.
 
-This repository documents my learning through hands-on programming, with an emphasis on understanding how algorithms work, how data structures are implemented, and how lower-level programming concepts behave in practice.
-
-## Topics Covered
-
-- **Algorithms:** Graph algorithms, dynamic programming, and string matching.
-- **Data Structures:** Trees, binary search trees, queues, and related structures.
-- **Systems Programming:** Memory management and concurrency-related experiments.
-- **Advanced Experiments:** Exploring bounded queues, hazard pointers, timing wheels, and consistent hashing.
+This repository documents hands-on work with algorithm design, data structure implementation, memory management, and lower-level programming concepts.
 
 ## Repository Structure
 
-The repository is being organized to make implementations easier to navigate, compile, and test.
+Source files are being organized by topic while preserving their existing implementations.
 
-Individual programs and experiments may have different requirements, depending on their implementation and dependencies.
+- **[Graph algorithms](algorithms/graphs/README.md):** Traversal, shortest paths, spanning trees, matching, connectivity, and flow.
+- **[Tree algorithms](algorithms/trees/README.md):** Tree traversal, decomposition, ancestor queries, and tree dynamic programming.
+- **Root-level examples:** Additional string algorithms, dynamic programming exercises, data structures, memory-management experiments, and concurrency examples are still being classified.
+
+Each topic folder includes an index with links to its implementations and a basic compile example.
 
 ## Building and Running
 
-For a standalone C source file that does not require special compiler options or additional source files, you can use GCC:
+If a source file is a standalone program, you can compile it from the repository root with GCC:
 
 ```bash
-gcc example.c -std=c11 -Wall -Wextra -Wpedantic -o example
+gcc path/to/example.c -std=c11 -Wall -Wextra -Wpedantic -o example
 ```
 
-Run the compiled program:
+For example:
 
 ```bash
-./example
+gcc algorithms/graphs/graph_bfs.c -std=c11 -Wall -Wextra -Wpedantic -o graph_bfs
 ```
 
-On Windows, run `example.exe` from your terminal.
+Run the compiled program with `./graph_bfs` on Linux/macOS or `graph_bfs.exe` on Windows.
 
-Replace `example.c` with the actual source filename. Some programs may require different compiler flags or libraries.
+The command above is a starting point, not a guarantee that every file compiles with the same options. Check each source file for required inputs, dependencies, and compiler settings.
 
 ## Development Approach
 
-My focus is on building a stronger understanding of C through implementation, experimentation, debugging, and testing.
+The goal is to learn through implementation, experimentation, debugging, and testing. Some programs are exercises or experimental prototypes; completeness, correctness testing, and performance characteristics vary. Advanced or concurrency-related examples should not be assumed to be production-ready.
 
-Some programs are learning exercises or experimental prototypes. Their completeness, testing, and performance characteristics vary; advanced implementations should not be assumed to be production-ready.
+Similarly named files are being retained until their differences and purposes can be reviewed, rather than deleting them based on filenames alone.
 
-## Future Improvements
+## Next Improvements
 
-- Organize source files by topic.
-- Add individual build and usage instructions.
-- Improve correctness testing and edge-case coverage.
-- Document implementation choices and limitations.
-- Add reproducible tests where appropriate.
+- Organize the remaining root-level source files into clear topic folders.
+- Add example inputs, expected outputs, and per-program instructions where useful.
+- Improve correctness tests and edge-case coverage.
+- Review similarly named variants and document why each is kept.
 
 ---
 
-*Built as an ongoing C programming and computer science learning project.*
+*An ongoing C programming and computer science learning project.*
