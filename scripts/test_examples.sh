@@ -57,6 +57,147 @@ compile_example "algorithms/graphs/dinic_max_flow.c" "$tmpdir/dinic"
 assert_contains "$tmpdir/dinic.out" 'Calculated Maximum Flow: 20 (Expected: 20)'
 echo "PASS Dinic maximum-flow example"
 
+compile_example "algorithms/graphs/graph_bfs.c" "$tmpdir/bfs"
+"$tmpdir/bfs" > "$tmpdir/bfs.out"
+assert_contains "$tmpdir/bfs.out" 'BFS Traversal starting from vertex 0: 0 3 2 1 4'
+echo "PASS graph BFS example"
+
+compile_example "algorithms/graphs/dijkstra_min_heap.c" "$tmpdir/dijkstra"
+"$tmpdir/dijkstra" > "$tmpdir/dijkstra.out"
+assert_contains "$tmpdir/dijkstra.out"  "$tmpdir/kmp"
+"$tmpdir/kmp" > "$tmpdir/kmp.out"
+assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 10 ] (Total: 1)'
+assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 0 2 5 8 10 12 ] (Total: 6)'
+echo "PASS KMP string search"
+
+compile_example "tests/test_kmp_search.c" "$tmpdir/test_kmp"
+"$tmpdir/test_kmp" > "$tmpdir/test_kmp.out"
+assert_contains "$tmpdir/test_kmp.out" 'Occurrences found at text indices: [ 0 1 2 ] (Total: 3)'
+assert_contains "$tmpdir/test_kmp.out" 'PASS KMP invalid-input and overlapping-match tests'
+echo "PASS KMP edge tests"
+
+compile_example "algorithms/graphs/prim_mst_heap.c" "$tmpdir/prim_list"
+"$tmpdir/prim_list" > "$tmpdir/prim_list.out"
+assert_contains "$tmpdir/prim_list.out" 'Total MST Weight: 19'
+echo "PASS Prim MST adjacency-list example"
+
+compile_example "algorithms/graphs/prim_mst_matrix.c" "$tmpdir/prim_matrix"
+"$tmpdir/prim_matrix" > "$tmpdir/prim_matrix.out"
+assert_contains "$tmpdir/prim_matrix.out" 'Total MST Weight: 17'
+echo "PASS Prim MST adjacency-matrix example"
+
+compile_example "algorithms/dynamic-programming/knapsack_01.c" "$tmpdir/knapsack"
+"$tmpdir/knapsack" > "$tmpdir/knapsack.out"
+assert_contains "$tmpdir/knapsack.out" 'Maximum Attainable Value: 220'
+echo "PASS 0/1 knapsack example"
+
+compile_example "data-structures/range-queries/fenwick_tree.c" "$tmpdir/fenwick"
+"$tmpdir/fenwick" > "$tmpdir/fenwick.out"
+assert_contains "$tmpdir/fenwick.out" 'Prefix Sum up to index 5: 15'
+assert_contains "$tmpdir/fenwick.out" 'Range Sum [3, 6]:         14'
+assert_contains "$tmpdir/fenwick.out" 'New Range Sum [3, 6]:     20'
+assert_contains "$tmpdir/fenwick.out" 'New Prefix Sum up to 5:   21'
+echo "PASS Fenwick tree example"
+
+compile_example "tests/test_fenwick_tree.c" "$tmpdir/test_fenwick"
+"$tmpdir/test_fenwick" > "$tmpdir/test_fenwick.out"
+assert_contains "$tmpdir/test_fenwick.out" 'PASS Fenwick tree boundary tests'
+echo "PASS Fenwick tree edge tests"
+
+compile_example "data-structures/tries/trie_autocomplete.c" "$tmpdir/trie"
+"$tmpdir/trie" > "$tmpdir/trie.out"
+assert_contains "$tmpdir/trie.out" 'Autocomplete suggestions for "cat":'
+assert_contains "$tmpdir/trie.out" ' -> category'
+assert_contains "$tmpdir/trie.out" 'No suggestions found for prefix "xyz"'
+echo "PASS trie autocomplete example"
+
+compile_example "tests/test_trie_autocomplete.c" "$tmpdir/test_trie"
+"$tmpdir/test_trie" > "$tmpdir/test_trie.out"
+assert_contains "$tmpdir/test_trie.out" ' -> cater'
+assert_contains "$tmpdir/test_trie.out" 'PASS trie autocomplete input-validation tests'
+echo "PASS trie autocomplete edge tests"
+
+compile_example "tests/test_aho_corasick_array.c" "$tmpdir/test_aho_array"
+"$tmpdir/test_aho_array" > "$tmpdir/test_aho_array.out"
+assert_contains "$tmpdir/test_aho_array.out" 'PASS fixed-array Aho-Corasick edge cases'
+echo "PASS fixed-array Aho-Corasick edge tests"
+
+compile_example "tests/test_aho_corasick_trie.c" "$tmpdir/test_aho_trie"
+"$tmpdir/test_aho_trie" > "$tmpdir/test_aho_trie.out"
+assert_contains "$tmpdir/test_aho_trie.out" 'Pattern [ID 4: "he"] at text index 4'
+assert_contains "$tmpdir/test_aho_trie.out" 'PASS pointer-trie Aho-Corasick edge cases'
+echo "PASS pointer-trie Aho-Corasick edge tests"
+
+echo "All targeted smoke tests passed."
+3\t9'
+assert_contains "$tmpdir/dijkstra.out"  "$tmpdir/kmp"
+"$tmpdir/kmp" > "$tmpdir/kmp.out"
+assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 10 ] (Total: 1)'
+assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 0 2 5 8 10 12 ] (Total: 6)'
+echo "PASS KMP string search"
+
+compile_example "tests/test_kmp_search.c" "$tmpdir/test_kmp"
+"$tmpdir/test_kmp" > "$tmpdir/test_kmp.out"
+assert_contains "$tmpdir/test_kmp.out" 'Occurrences found at text indices: [ 0 1 2 ] (Total: 3)'
+assert_contains "$tmpdir/test_kmp.out" 'PASS KMP invalid-input and overlapping-match tests'
+echo "PASS KMP edge tests"
+
+compile_example "algorithms/graphs/prim_mst_heap.c" "$tmpdir/prim_list"
+"$tmpdir/prim_list" > "$tmpdir/prim_list.out"
+assert_contains "$tmpdir/prim_list.out" 'Total MST Weight: 19'
+echo "PASS Prim MST adjacency-list example"
+
+compile_example "algorithms/graphs/prim_mst_matrix.c" "$tmpdir/prim_matrix"
+"$tmpdir/prim_matrix" > "$tmpdir/prim_matrix.out"
+assert_contains "$tmpdir/prim_matrix.out" 'Total MST Weight: 17'
+echo "PASS Prim MST adjacency-matrix example"
+
+compile_example "algorithms/dynamic-programming/knapsack_01.c" "$tmpdir/knapsack"
+"$tmpdir/knapsack" > "$tmpdir/knapsack.out"
+assert_contains "$tmpdir/knapsack.out" 'Maximum Attainable Value: 220'
+echo "PASS 0/1 knapsack example"
+
+compile_example "data-structures/range-queries/fenwick_tree.c" "$tmpdir/fenwick"
+"$tmpdir/fenwick" > "$tmpdir/fenwick.out"
+assert_contains "$tmpdir/fenwick.out" 'Prefix Sum up to index 5: 15'
+assert_contains "$tmpdir/fenwick.out" 'Range Sum [3, 6]:         14'
+assert_contains "$tmpdir/fenwick.out" 'New Range Sum [3, 6]:     20'
+assert_contains "$tmpdir/fenwick.out" 'New Prefix Sum up to 5:   21'
+echo "PASS Fenwick tree example"
+
+compile_example "tests/test_fenwick_tree.c" "$tmpdir/test_fenwick"
+"$tmpdir/test_fenwick" > "$tmpdir/test_fenwick.out"
+assert_contains "$tmpdir/test_fenwick.out" 'PASS Fenwick tree boundary tests'
+echo "PASS Fenwick tree edge tests"
+
+compile_example "data-structures/tries/trie_autocomplete.c" "$tmpdir/trie"
+"$tmpdir/trie" > "$tmpdir/trie.out"
+assert_contains "$tmpdir/trie.out" 'Autocomplete suggestions for "cat":'
+assert_contains "$tmpdir/trie.out" ' -> category'
+assert_contains "$tmpdir/trie.out" 'No suggestions found for prefix "xyz"'
+echo "PASS trie autocomplete example"
+
+compile_example "tests/test_trie_autocomplete.c" "$tmpdir/test_trie"
+"$tmpdir/test_trie" > "$tmpdir/test_trie.out"
+assert_contains "$tmpdir/test_trie.out" ' -> cater'
+assert_contains "$tmpdir/test_trie.out" 'PASS trie autocomplete input-validation tests'
+echo "PASS trie autocomplete edge tests"
+
+compile_example "tests/test_aho_corasick_array.c" "$tmpdir/test_aho_array"
+"$tmpdir/test_aho_array" > "$tmpdir/test_aho_array.out"
+assert_contains "$tmpdir/test_aho_array.out" 'PASS fixed-array Aho-Corasick edge cases'
+echo "PASS fixed-array Aho-Corasick edge tests"
+
+compile_example "tests/test_aho_corasick_trie.c" "$tmpdir/test_aho_trie"
+"$tmpdir/test_aho_trie" > "$tmpdir/test_aho_trie.out"
+assert_contains "$tmpdir/test_aho_trie.out" 'Pattern [ID 4: "he"] at text index 4'
+assert_contains "$tmpdir/test_aho_trie.out" 'PASS pointer-trie Aho-Corasick edge cases'
+echo "PASS pointer-trie Aho-Corasick edge tests"
+
+echo "All targeted smoke tests passed."
+5\t11'
+echo "PASS Dijkstra shortest-path example"
+
 compile_example "algorithms/strings/kmp_search.c" "$tmpdir/kmp"
 "$tmpdir/kmp" > "$tmpdir/kmp.out"
 assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 10 ] (Total: 1)'
