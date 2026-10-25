@@ -10,6 +10,8 @@ bash scripts/test_examples.sh
 - `compile_all.sh` compiles every C source file separately using C11, `-Wall -Wextra -Wpedantic -Werror`, POSIX declarations, pthread support, and the math library. Any compilation warning or failure fails the check.
 - `test_examples.sh` compiles and runs representative examples and checks selected output lines against known results.
 - `test_aho_corasick_array.c` and `test_aho_corasick_trie.c` exercise invalid input, empty and overlong patterns, duplicate handling, repeated builds, and capacity behavior.
+- `test_kmp_search.c` checks invalid inputs and overlapping matches.
+- `test_trie_autocomplete.c` checks invalid words and prefixes, maximum word length, and duplicate insertion.
 
 ## Smoke-test coverage
 
