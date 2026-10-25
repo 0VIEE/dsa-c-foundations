@@ -1,12 +1,12 @@
 # Tests and Build Checks
 
-Run the repository checks from the project root in a Bash environment with GCC installed:
+Run all checks from the project root in a Bash environment with GCC and Make installed:
 
 ```bash
-bash scripts/compile_all.sh
-bash scripts/test_examples.sh
-bash scripts/test_sanitizers.sh
+make verify
 ```
+
+Or run `make check`, `make test`, and `make sanitize` individually. The underlying Bash scripts can also be run directly.
 
 - `compile_all.sh` compiles every C source file separately using C11, `-Wall -Wextra -Wpedantic -Werror`, POSIX declarations, pthread support, and the math library. Any compilation warning or failure fails the check.
 - `test_examples.sh` compiles and runs representative examples and checks selected output lines against known results.
