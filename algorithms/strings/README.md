@@ -12,11 +12,14 @@ Implementations exploring pattern matching, suffix-based data structures, and su
 - [suffix_array_rmq_lcp.c](suffix_array_rmq_lcp.c) — suffix array, LCP, and range-minimum query
 - [suffix_automaton.c](suffix_automaton.c) — suffix automaton
 
-The former `aho_corasick12.c` and `aho_corasick123.c` files were exact copies of the pointer-based example, so the redundant copies were removed. Their previous versions remain in Git history.
+## Aho–Corasick examples
 
-## Current limitations
+Both implementations now validate their inputs and check allocation or capacity limits where applicable. They accept non-empty lowercase English patterns and lowercase text only, with a maximum pattern length of 31 characters.
 
-Both Aho–Corasick examples are educational demonstrations, not general-purpose text-search libraries. They currently assume lowercase English letters (`a`–`z`) and do not fully validate input or capacity limits. The pointer-based version also stores a single pattern ID per terminal node, so inserting the same pattern more than once overwrites its earlier ID. These edge cases should be addressed before using either example with arbitrary input.
+- The fixed-array implementation has a limit of 128 trie states and treats repeated pattern strings as one pattern.
+- The pointer-trie implementation allocates nodes dynamically and can report multiple pattern IDs for the same string.
+
+The examples remain educational demonstrations. They do not provide a Unicode-aware or case-insensitive search API, and the pointer-based example relies on callers to map pattern IDs consistently to the pattern array supplied to search. Edge-case tests cover invalid characters, empty and overlong patterns, duplicate patterns, repeated automaton construction, and the fixed-array capacity limit.
 
 ## Compile an example
 
