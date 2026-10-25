@@ -59,14 +59,9 @@ void prim_mst(int graph[V][V]) {
 
 int main() {
     /*
-        Weighted Undirected Graph:
-            (0)---2---(1)
-             | \       |
-             6   8     3
-             |     \   |
-            (2)---5---(3)---9---(4)
-                  \         /
-                   7-------(4)
+        Weighted undirected graph:
+        0-1 (2), 0-2 (6), 0-3 (8), 1-3 (3),
+        2-3 (5), 2-4 (7), 3-4 (9).
     */
     int graph[V][V] = {
         {0, 2, 6, 8, 0},
