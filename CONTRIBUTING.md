@@ -18,9 +18,10 @@ Run these commands from the repository root in a Bash environment with GCC insta
 ```bash
 bash scripts/compile_all.sh
 bash scripts/test_examples.sh
+bash scripts/test_sanitizers.sh
 ```
 
-The compile sweep uses C11, common warning flags, and `-Werror`; all examples should compile without warnings. The smoke tests check representative outputs and selected edge cases, but they are not a substitute for reviewing the algorithm's correctness.
+The compile sweep uses C11, common warning flags, and `-Werror`; all examples should compile without warnings. The smoke tests check representative outputs and selected edge cases; sanitizer checks catch some memory and undefined-behavior issues. Neither is a substitute for reviewing the algorithm's correctness.
 
 When changing behavior, update or add a focused test. Do not describe an implementation as production-ready unless its correctness, memory safety, and platform assumptions have been evaluated accordingly.
 
