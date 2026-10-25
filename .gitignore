@@ -1,0 +1,15 @@
+
+# Compiled executables
+*.exe
+*.out
+
+# Compiled object files
+*.o
+*.obj
+
+# Build output directories
+build/
+bin/
+
+# Temporary files created by Code Runner
+tempCodeRunnerFile.*
