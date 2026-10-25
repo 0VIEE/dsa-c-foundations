@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 
 int compute_lps_array(const char *pat, size_t length, size_t lps[]) {
@@ -31,6 +32,10 @@ int kmp_search(const char *txt, const char *pat) {
 
     size_t n = strlen(txt);
     size_t m = strlen(pat);
+    if (m > SIZE_MAX / sizeof(size_t)) {
+        return 0;
+    }
+
     size_t *lps = (size_t *)malloc(m * sizeof(*lps));
     if (lps == NULL) {
         return 0;
