@@ -13,13 +13,13 @@ This repository is a collection of learning-oriented C examples. Contributions s
 
 ## Before committing
 
-Run these commands from the repository root in a Bash environment with GCC installed:
+Run the complete check suite from the repository root in a Bash environment with GCC and Make installed:
 
 ```bash
-bash scripts/compile_all.sh
-bash scripts/test_examples.sh
-bash scripts/test_sanitizers.sh
+make verify
 ```
+
+Alternatively, run `bash scripts/compile_all.sh`, `bash scripts/test_examples.sh`, and `bash scripts/test_sanitizers.sh` individually.
 
 The compile sweep uses C11, common warning flags, and `-Werror`; all examples should compile without warnings. The smoke tests check representative outputs and selected edge cases; sanitizer checks catch some memory and undefined-behavior issues. Neither is a substitute for reviewing the algorithm's correctness.
 
