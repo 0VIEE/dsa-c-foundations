@@ -63,12 +63,12 @@ assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 10 ] (To
 assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 0 2 5 8 10 12 ] (Total: 6)'
 echo "PASS KMP string search"
 
-compile_example "algorithms/graphs/prim_mst.c" "$tmpdir/prim_list"
+compile_example "algorithms/graphs/prim_mst_heap.c" "$tmpdir/prim_list"
 "$tmpdir/prim_list" > "$tmpdir/prim_list.out"
 assert_contains "$tmpdir/prim_list.out" 'Total MST Weight: 19'
 echo "PASS Prim MST adjacency-list example"
 
-compile_example "algorithms/graphs/prims_mst.c" "$tmpdir/prim_matrix"
+compile_example "algorithms/graphs/prim_mst_matrix.c" "$tmpdir/prim_matrix"
 "$tmpdir/prim_matrix" > "$tmpdir/prim_matrix.out"
 assert_contains "$tmpdir/prim_matrix.out" 'Total MST Weight: 17'
 echo "PASS Prim MST adjacency-matrix example"
