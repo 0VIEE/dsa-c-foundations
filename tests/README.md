@@ -12,6 +12,7 @@ bash scripts/test_examples.sh
 - `test_aho_corasick_array.c` and `test_aho_corasick_trie.c` exercise invalid input, empty and overlong patterns, duplicate handling, repeated builds, and capacity behavior.
 - `test_kmp_search.c` checks invalid inputs and overlapping matches.
 - `test_trie_autocomplete.c` checks invalid words and prefixes, maximum word length, and duplicate insertion.
+- `test_fenwick_tree.c` checks invalid sizes and indices, range boundaries, and the zero-index update case.
 
 ## Smoke-test coverage
 
