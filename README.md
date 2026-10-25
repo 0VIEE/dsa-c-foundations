@@ -1,13 +1,20 @@
 # DSA C Foundations
 
-A learning-focused collection of C implementations and experiments covering data structures, algorithms, and systems programming.
+[![C compile and smoke tests](https://github.com/0VIEE/dsa-c-foundations/actions/workflows/compile-c.yml/badge.svg)](https://github.com/0VIEE/dsa-c-foundations/actions/workflows/compile-c.yml)
+![Language](https://img.shields.io/badge/language-C11-00599C?logo=c&logoColor=white)
 
-The goal is to build understanding through implementation, experimentation, debugging, and careful review of how each approach works.
+A learning-focused collection of C implementations covering data structures, algorithms, and systems programming. The goal is to understand how each technique works by implementing it, checking its behavior, and documenting its assumptions.
 
-## Repository Map
+## What you'll find
+
+- **Algorithms** — graph traversal and shortest paths, spanning trees, tree algorithms, dynamic programming, string matching, and range-query problems.
+- **Data structures** — linked lists, stacks, queues, trees, heaps, Fenwick trees, segment trees, bit vectors, and tries.
+- **Systems experiments** — memory allocation, alignment, concurrent queues and stacks, hazard pointers, consistent hashing, and timing wheels.
+
+## Repository map
 
 ### Algorithms
-- [Graphs](algorithms/graphs/README.md) — BFS, shortest paths, spanning trees, connectivity, matching, and network flow.
+- [Graphs](algorithms/graphs/README.md) — BFS, shortest paths, spanning trees, connectivity, matching, and maximum flow.
 - [Trees](algorithms/trees/README.md) — traversal, decomposition, ancestor queries, and tree dynamic programming.
 - [Dynamic programming](algorithms/dynamic-programming/README.md) — knapsack, coin change, subsequences, and optimization problems.
 - [String algorithms](algorithms/strings/README.md) — pattern matching, suffix structures, and substring queries.
@@ -25,43 +32,33 @@ The goal is to build understanding through implementation, experimentation, debu
 - [Concurrency](systems/concurrency/README.md) — queues, stacks, hazard pointers, and cache-line behavior.
 - [Advanced experiments](systems/advanced/README.md) — AST analysis, consistent hashing, and timing wheels.
 
-Each topic index links to its source files and provides compile guidance where useful.
+## Quick start
 
-## Building and Running
-
-If a source file is a standalone program, compile it from the repository root with GCC:
-
-```bash
-gcc path/to/example.c -std=c11 -Wall -Wextra -Wpedantic -o example
-```
-
-For example:
+Install GCC and compile an individual standalone example from the repository root:
 
 ```bash
 gcc algorithms/graphs/graph_bfs.c -std=c11 -Wall -Wextra -Wpedantic -o graph_bfs
 ```
 
-Run the program with `./graph_bfs` on Linux/macOS or `graph_bfs.exe` on Windows.
+Run it on Linux/macOS with `./graph_bfs`, or on Windows with `graph_bfs.exe`.
 
-These commands are starting points, not a guarantee that every file builds with identical options. Check each source file for required inputs, dependencies, compiler settings, and limitations.
+Most programs use built-in demonstration data rather than reading command-line input. Read the source and its topic README for input assumptions, fixed limits, and implementation details before adapting an example.
 
-## Checks
+## Build and test
 
-The repository includes a GCC compile sweep and targeted smoke tests:
+Run the repository-wide compile check and targeted smoke tests in a Bash environment with GCC installed:
 
 ```bash
 bash scripts/compile_all.sh
 bash scripts/test_examples.sh
 ```
 
-See [tests/README.md](tests/README.md) for the scope and limitations of these checks. The compile sweep is also run by GitHub Actions.
+The compile check builds every C source file with C11 and common warnings treated as errors. The smoke tests verify expected output from representative algorithms and exercise edge cases in both Aho–Corasick implementations. GitHub Actions runs these checks on pushes and pull requests.
 
-## Project Status and Quality
+See [tests/README.md](tests/README.md) for coverage and limitations.
 
-This is a learning repository, not a claim that every implementation is production-ready. Completeness, correctness testing, and performance characteristics vary, especially for memory-management and concurrency experiments.
+## Project status
 
-Exact duplicate source files have been removed after comparing their contents; implementations that differ remain separate. GitHub Actions now compiles every C source file and runs targeted smoke tests, with sample cases documented in [tests/README.md](tests/README.md). This is a baseline rather than full correctness coverage; edge-case tests and stress testing are still needed, especially for concurrency and allocator experiments. The string-algorithm index calls out known input and capacity limitations in the Aho–Corasick demonstrations.
+This is an active learning repository, not a claim that every implementation is production-ready. Automated checks confirm that all examples compile without warnings and that selected sample cases behave as expected; they do not prove every algorithm correct. Memory-management and concurrency experiments in particular require additional edge-case, memory-safety, and stress testing before reuse in real systems.
 
----
-
-*An ongoing C programming and computer science learning project.*
+Exact duplicate files have been removed, distinct implementations have descriptive names, and each topic folder has its own index. See [CONTRIBUTING.md](CONTRIBUTING.md) for conventions when adding or improving examples.
