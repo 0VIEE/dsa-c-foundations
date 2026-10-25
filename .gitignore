@@ -1,15 +1,24 @@
-
-# Compiled executables
+# Compiled C artifacts
 *.exe
 *.out
-
-# Compiled object files
 *.o
 *.obj
+*.a
+*.so
+*.dll
+*.dylib
+*.dSYM/
 
-# Build output directories
-build/
-bin/
+# Build, coverage, and crash output
+/build/
+/bin/
+/coverage/
+*.gcda
+*.gcno
+core
+core.*
 
-# Temporary files created by Code Runner
+# Operating-system and editor temporary files
+.DS_Store
+Thumbs.db
 tempCodeRunnerFile.*
