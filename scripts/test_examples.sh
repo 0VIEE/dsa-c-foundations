@@ -10,7 +10,7 @@ trap 'rm -rf "$tmpdir"' EXIT
 compile_example() {
   local source="$1"
   local output="$2"
-  gcc -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Wpedantic -pthread "$source" -lm -o "$output"
+  gcc -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Wpedantic -Werror -pthread "$source" -lm -o "$output"
 }
 
 assert_contains() {
@@ -56,5 +56,52 @@ compile_example "algorithms/graphs/dinic_max_flow.c" "$tmpdir/dinic"
 "$tmpdir/dinic" > "$tmpdir/dinic.out"
 assert_contains "$tmpdir/dinic.out" 'Calculated Maximum Flow: 20 (Expected: 20)'
 echo "PASS Dinic maximum-flow example"
+
+compile_example "algorithms/strings/kmp_search.c" "$tmpdir/kmp"
+"$tmpdir/kmp" > "$tmpdir/kmp.out"
+assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 10 ] (Total: 1)'
+assert_contains "$tmpdir/kmp.out" 'Occurrences found at text indices: [ 0 2 5 8 10 12 ] (Total: 6)'
+echo "PASS KMP string search"
+
+compile_example "algorithms/graphs/prim_mst.c" "$tmpdir/prim_list"
+"$tmpdir/prim_list" > "$tmpdir/prim_list.out"
+assert_contains "$tmpdir/prim_list.out" 'Total MST Weight: 19'
+echo "PASS Prim MST adjacency-list example"
+
+compile_example "algorithms/graphs/prims_mst.c" "$tmpdir/prim_matrix"
+"$tmpdir/prim_matrix" > "$tmpdir/prim_matrix.out"
+assert_contains "$tmpdir/prim_matrix.out" 'Total MST Weight: 17'
+echo "PASS Prim MST adjacency-matrix example"
+
+compile_example "algorithms/dynamic-programming/knapsack_01.c" "$tmpdir/knapsack"
+"$tmpdir/knapsack" > "$tmpdir/knapsack.out"
+assert_contains "$tmpdir/knapsack.out" 'Maximum Attainable Value: 220'
+echo "PASS 0/1 knapsack example"
+
+compile_example "data-structures/range-queries/fenwick_tree.c" "$tmpdir/fenwick"
+"$tmpdir/fenwick" > "$tmpdir/fenwick.out"
+assert_contains "$tmpdir/fenwick.out" 'Prefix Sum up to index 5: 15'
+assert_contains "$tmpdir/fenwick.out" 'Range Sum [3, 6]:         14'
+assert_contains "$tmpdir/fenwick.out" 'New Range Sum [3, 6]:     20'
+assert_contains "$tmpdir/fenwick.out" 'New Prefix Sum up to 5:   21'
+echo "PASS Fenwick tree example"
+
+compile_example "data-structures/tries/trie_autocomplete.c" "$tmpdir/trie"
+"$tmpdir/trie" > "$tmpdir/trie.out"
+assert_contains "$tmpdir/trie.out" 'Autocomplete suggestions for "cat":'
+assert_contains "$tmpdir/trie.out" ' -> category'
+assert_contains "$tmpdir/trie.out" 'No suggestions found for prefix "xyz"'
+echo "PASS trie autocomplete example"
+
+compile_example "tests/test_aho_corasick_array.c" "$tmpdir/test_aho_array"
+"$tmpdir/test_aho_array" > "$tmpdir/test_aho_array.out"
+assert_contains "$tmpdir/test_aho_array.out" 'PASS fixed-array Aho-Corasick edge cases'
+echo "PASS fixed-array Aho-Corasick edge tests"
+
+compile_example "tests/test_aho_corasick_trie.c" "$tmpdir/test_aho_trie"
+"$tmpdir/test_aho_trie" > "$tmpdir/test_aho_trie.out"
+assert_contains "$tmpdir/test_aho_trie.out" 'Pattern [ID 4: "he"] at text index 4'
+assert_contains "$tmpdir/test_aho_trie.out" 'PASS pointer-trie Aho-Corasick edge cases'
+echo "PASS pointer-trie Aho-Corasick edge tests"
 
 echo "All targeted smoke tests passed."
