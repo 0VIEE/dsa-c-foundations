@@ -1,0 +1,25 @@
+name: C compile and smoke tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  compile-all:
+    name: Compile all C examples
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Compile each C source file
+        run: bash scripts/compile_all.sh
+
+  smoke-tests:
+    name: Run targeted smoke tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Test Aho-Corasick and BST examples
+        run: bash scripts/test_examples.sh
