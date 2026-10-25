@@ -151,7 +151,7 @@ int main() {
         2 -> 4 (9),  2 -> 5 (10)
         3 -> 5 (10)
         4 -> 3 (6),  4 -> 5 (10)
-        Expected Max Flow: 19
+        Expected Max Flow: 20
     */
     int n = 6;
     struct Graph *g = create_graph(n);
@@ -178,7 +178,7 @@ int main() {
     int max_flow = dinic_max_flow(g, 0, 5);
 
     printf("=== Dinic's Algorithm Maximum Flow ===\n");
-    printf("Calculated Maximum Flow: %d (Expected: 19)\n", max_flow);
+    printf("Calculated Maximum Flow: %d (Expected: 20)\n", max_flow);
 
     free_graph(g);
     return 0;
