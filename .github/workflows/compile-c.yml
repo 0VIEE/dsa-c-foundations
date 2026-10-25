@@ -17,7 +17,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
       - name: Compile each C source file
-        run: bash scripts/compile_all.sh
+        run: make check
 
   smoke-tests:
     name: Run targeted smoke tests
@@ -27,7 +27,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
       - name: Run representative algorithm smoke tests
-        run: bash scripts/test_examples.sh
+        run: make test
 
   sanitizer-tests:
     name: Run address and undefined-behavior sanitizers
@@ -37,4 +37,4 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
       - name: Run sanitizer checks on edge-case tests
-        run: bash scripts/test_sanitizers.sh
+        run: make sanitize
