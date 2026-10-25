@@ -2,47 +2,55 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Precompute Longest Proper Prefix which is also Suffix (lps)
-void compute_lps_array(const char *pat, int m, int lps[]) {
-    int len = 0; // Length of the previous longest prefix suffix
-    lps[0] = 0;  // Base case: length 1 prefix has no proper prefix
-    int i = 1;
+int compute_lps_array(const char *pat, size_t length, size_t lps[]) {
+    if (pat == NULL || lps == NULL || length == 0) {
+        return 0;
+    }
 
-    while (i < m) {
-        if (pat[i] == pat[len]) {
-            len++;
-            lps[i] = len;
-            i++;
+    size_t matched = 0;
+    lps[0] = 0;
+
+    for (size_t i = 1; i < length;) {
+        if (pat[i] == pat[matched]) {
+            lps[i++] = ++matched;
+        } else if (matched != 0) {
+            matched = lps[matched - 1];
         } else {
-            if (len != 0) {
-                // Fallback to previous prefix match without advancing i
-                len = lps[len - 1];
-            } else {
-                lps[i] = 0;
-                i++;
-            }
+            lps[i++] = 0;
         }
     }
+
+    return 1;
 }
 
-// Search all occurrences of pattern in text using KMP
-void kmp_search(const char *txt, const char *pat) {
-    int n = strlen(txt);
-    int m = strlen(pat);
+/* Returns 1 after a successful search, or 0 for invalid input/allocation failure. */
+int kmp_search(const char *txt, const char *pat) {
+    if (txt == NULL || pat == NULL || pat[0] == '\0') {
+        return 0;
+    }
 
-    int *lps = (int*)malloc(m * sizeof(int));
-    compute_lps_array(pat, m, lps);
+    size_t n = strlen(txt);
+    size_t m = strlen(pat);
+    size_t *lps = (size_t *)malloc(m * sizeof(*lps));
+    if (lps == NULL) {
+        return 0;
+    }
+
+    if (!compute_lps_array(pat, m, lps)) {
+        free(lps);
+        return 0;
+    }
 
     printf("Search Pattern: \"%s\"\n", pat);
     printf("Precomputed LPS Array: [ ");
-    for (int k = 0; k < m; k++) {
-        printf("%d ", lps[k]);
+    for (size_t k = 0; k < m; k++) {
+        printf("%zu ", lps[k]);
     }
     printf("]\n");
 
-    int i = 0; // Index for txt
-    int j = 0; // Index for pat
-    int match_count = 0;
+    size_t i = 0;
+    size_t j = 0;
+    size_t match_count = 0;
 
     printf("Occurrences found at text indices: [ ");
     while (i < n) {
@@ -52,9 +60,9 @@ void kmp_search(const char *txt, const char *pat) {
         }
 
         if (j == m) {
-            printf("%d ", i - j);
+            printf("%zu ", i - j);
             match_count++;
-            j = lps[j - 1]; // Reset pattern pointer via failure link
+            j = lps[j - 1];
         } else if (i < n && pat[j] != txt[i]) {
             if (j != 0) {
                 j = lps[j - 1];
@@ -63,12 +71,14 @@ void kmp_search(const char *txt, const char *pat) {
             }
         }
     }
-    printf("] (Total: %d)\n\n", match_count);
+    printf("] (Total: %zu)\n\n", match_count);
 
     free(lps);
+    return 1;
 }
 
-int main() {
+#ifndef KMP_SEARCH_NO_MAIN
+int main(void) {
     const char *text = "ababcabcabababd";
     const char *pattern1 = "ababd";
     const char *pattern2 = "ab";
@@ -76,8 +86,11 @@ int main() {
     printf("=== Knuth-Morris-Pratt (KMP) String Search ===\n");
     printf("Primary Text: \"%s\"\n\n", text);
 
-    kmp_search(text, pattern1);
-    kmp_search(text, pattern2);
+    if (!kmp_search(text, pattern1) || !kmp_search(text, pattern2)) {
+        fputs("KMP search failed.\n", stderr);
+        return EXIT_FAILURE;
+    }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
+#endif
