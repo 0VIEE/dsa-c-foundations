@@ -52,4 +52,9 @@ assert_contains "$tmpdir/bst_delete.out" 'After deleting 20 (leaf): 30 40 50 60 
 assert_contains "$tmpdir/bst_delete.out" 'After deleting 50 (root with 2 kids): 30 40 60 70 80'
 echo "PASS BST deletion example"
 
+compile_example "algorithms/graphs/dinic_max_flow.c" "$tmpdir/dinic"
+"$tmpdir/dinic" > "$tmpdir/dinic.out"
+assert_contains "$tmpdir/dinic.out" 'Calculated Maximum Flow: 19 (Expected: 19)'
+echo "PASS Dinic maximum-flow example"
+
 echo "All targeted smoke tests passed."
