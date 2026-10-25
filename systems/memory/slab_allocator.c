@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #define SLAB_SLOTS 4   // Number of object slots per slab
 #define OBJECT_SIZE 32 // Size of each object in bytes
