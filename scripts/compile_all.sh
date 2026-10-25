@@ -23,7 +23,7 @@ while IFS= read -r -d '' source; do
   output="$tmpdir/${output_name%.c}"
   log="$tmpdir/${output_name}.log"
 
-  if gcc -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Wpedantic -pthread "$source" -lm -o "$output" 2>"$log"; then
+  if gcc -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Wpedantic -Werror -pthread "$source" -lm -o "$output" 2>"$log"; then
     if [[ -s "$log" ]]; then
       warning_files=$((warning_files + 1))
       echo "WARN $relative_path"
