@@ -25,6 +25,8 @@ bash scripts/test_sanitizers.sh
 | BST insertion/search | Insert `50, 30, 70, 20, 40, 60, 80` | Inorder traversal: `20 30 40 50 60 70 80`; search finds 40 and does not find 99 |
 | BST deletion | Delete 20, then 50 from the sample BST | Final traversal: `30 40 60 70 80` |
 | Dinic maximum flow | The directed capacity network in `algorithms/graphs/dinic_max_flow.c` | Maximum flow: `20` |
+| Graph BFS | Built-in undirected graph, start vertex `0` | Traversal: `0 3 2 1 4` |
+| Dijkstra | Built-in weighted graph, source vertex `0` | Distance to vertex `3`: `9`; to vertex `5`: `11` |
 | KMP search | Text `ababcabcabababd`; patterns `ababd` and `ab` | Match indices `10`; then `0, 2, 5, 8, 10, 12` |
 | Prim's MST (heap) | Adjacency-list sample graph | Total MST weight: `19` |
 | Prim's MST (matrix) | Adjacency-matrix sample graph | Total MST weight: `17` |
