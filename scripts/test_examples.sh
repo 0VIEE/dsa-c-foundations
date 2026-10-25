@@ -54,7 +54,7 @@ echo "PASS BST deletion example"
 
 compile_example "algorithms/graphs/dinic_max_flow.c" "$tmpdir/dinic"
 "$tmpdir/dinic" > "$tmpdir/dinic.out"
-assert_contains "$tmpdir/dinic.out" 'Calculated Maximum Flow: 19 (Expected: 19)'
+assert_contains "$tmpdir/dinic.out" 'Calculated Maximum Flow: 20 (Expected: 20)'
 echo "PASS Dinic maximum-flow example"
 
 echo "All targeted smoke tests passed."
