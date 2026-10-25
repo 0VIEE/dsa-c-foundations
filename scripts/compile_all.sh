@@ -14,7 +14,6 @@ trap 'rm -rf "$tmpdir"' EXIT
 
 total=0
 failures=0
-warning_files=0
 
 while IFS= read -r -d '' source; do
   total=$((total + 1))
@@ -24,13 +23,7 @@ while IFS= read -r -d '' source; do
   log="$tmpdir/${output_name}.log"
 
   if gcc -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Wpedantic -Werror -pthread "$source" -lm -o "$output" 2>"$log"; then
-    if [[ -s "$log" ]]; then
-      warning_files=$((warning_files + 1))
-      echo "WARN $relative_path"
-      sed 's/^/  /' "$log"
-    else
-      echo "PASS $relative_path"
-    fi
+    echo "PASS $relative_path"
   else
     failures=$((failures + 1))
     echo "FAIL $relative_path"
@@ -39,7 +32,7 @@ while IFS= read -r -d '' source; do
 done < <(find . -type f -name '*.c' -not -path './.git/*' -print0 | sort -z)
 
 echo
-echo "Compile summary: $total source file(s), $failures failure(s), $warning_files file(s) compiled with warnings."
+echo "Compile summary: $total source file(s), $failures failure(s); warnings are treated as errors."
 
 if [[ "$total" -eq 0 ]]; then
   echo "ERROR: no C source files were found." >&2
