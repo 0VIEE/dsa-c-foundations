@@ -2,21 +2,34 @@
 
 A learning-focused collection of C implementations and experiments covering data structures, algorithms, and systems programming.
 
-This repository documents hands-on work with algorithm design, data structure implementation, memory management, and lower-level programming concepts.
+The goal is to build understanding through implementation, experimentation, debugging, and careful review of how each approach works.
 
-## Repository Structure
+## Repository Map
 
-Source files are being organized by topic while preserving their existing implementations.
+### Algorithms
+- [Graphs](algorithms/graphs/README.md) — BFS, shortest paths, spanning trees, connectivity, matching, and network flow.
+- [Trees](algorithms/trees/README.md) — traversal, decomposition, ancestor queries, and tree dynamic programming.
+- [Dynamic programming](algorithms/dynamic-programming/README.md) — knapsack, coin change, subsequences, and optimization problems.
+- [String algorithms](algorithms/strings/README.md) — pattern matching, suffix structures, and substring queries.
+- [Range-query algorithms](algorithms/range-queries/README.md) — inversion counting with a Fenwick tree.
 
-- **[Graph algorithms](algorithms/graphs/README.md):** Traversal, shortest paths, spanning trees, matching, connectivity, and flow.
-- **[Tree algorithms](algorithms/trees/README.md):** Tree traversal, decomposition, ancestor queries, and tree dynamic programming.
-- **Root-level examples:** Additional string algorithms, dynamic programming exercises, data structures, memory-management experiments, and concurrency examples are still being classified.
+### Data structures
+- [Linear structures](data-structures/linear/README.md) — linked lists, stacks, and queues.
+- [Trees](data-structures/trees/README.md) — binary trees and binary search trees.
+- [Priority queues](data-structures/heaps/README.md) — priority-queue example.
+- [Range-query structures](data-structures/range-queries/README.md) — Fenwick trees, segment trees, and bit vectors.
+- [Tries](data-structures/tries/README.md) — prefix-tree autocomplete.
 
-Each topic folder includes an index with links to its implementations and a basic compile example.
+### Systems programming
+- [Memory management](systems/memory/README.md) — alignment, arenas, and allocator experiments.
+- [Concurrency](systems/concurrency/README.md) — queues, stacks, hazard pointers, and cache-line behavior.
+- [Advanced experiments](systems/advanced/README.md) — AST analysis, consistent hashing, and timing wheels.
+
+Each topic index links to its source files and provides compile guidance where useful.
 
 ## Building and Running
 
-If a source file is a standalone program, you can compile it from the repository root with GCC:
+If a source file is a standalone program, compile it from the repository root with GCC:
 
 ```bash
 gcc path/to/example.c -std=c11 -Wall -Wextra -Wpedantic -o example
@@ -28,22 +41,15 @@ For example:
 gcc algorithms/graphs/graph_bfs.c -std=c11 -Wall -Wextra -Wpedantic -o graph_bfs
 ```
 
-Run the compiled program with `./graph_bfs` on Linux/macOS or `graph_bfs.exe` on Windows.
+Run the program with `./graph_bfs` on Linux/macOS or `graph_bfs.exe` on Windows.
 
-The command above is a starting point, not a guarantee that every file compiles with the same options. Check each source file for required inputs, dependencies, and compiler settings.
+These commands are starting points, not a guarantee that every file builds with identical options. Check each source file for required inputs, dependencies, compiler settings, and limitations.
 
-## Development Approach
+## Project Status and Quality
 
-The goal is to learn through implementation, experimentation, debugging, and testing. Some programs are exercises or experimental prototypes; completeness, correctness testing, and performance characteristics vary. Advanced or concurrency-related examples should not be assumed to be production-ready.
+This is a learning repository, not a claim that every implementation is production-ready. Completeness, correctness testing, and performance characteristics vary, especially for memory-management and concurrency experiments.
 
-Similarly named files are being retained until their differences and purposes can be reviewed, rather than deleting them based on filenames alone.
-
-## Next Improvements
-
-- Organize the remaining root-level source files into clear topic folders.
-- Add example inputs, expected outputs, and per-program instructions where useful.
-- Improve correctness tests and edge-case coverage.
-- Review similarly named variants and document why each is kept.
+Similarly named implementations have been retained rather than removed based on filenames alone. They should be compared and tested before any consolidation. Future improvements include reproducible tests, example inputs and outputs, and clearer notes on edge cases.
 
 ---
 
